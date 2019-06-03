@@ -3,9 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.0.1",
+    "@reach/router": "^1.2.1",
+    "apollo-cache-inmemory": "^1.6.0",
+    "apollo-client": "^2.6.0",
+    "apollo-link-http": "^1.5.14",
+    "emotion": "^10.0.9",
+    "formik": "^1.5.7",
+    "graphql": "^14.3.1",
+    "graphql-tag": "^2.10.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-emotion": "^10.0.0",
+    "react-scripts": "3.0.1",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -27,5 +38,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "apollo": "^2.12.5",
+    "artillery": "^1.6.0-28",
+    "jest-dom": "^3.4.0",
+    "react-testing-library": "^8.0.1"
   }
 }
