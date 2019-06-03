@@ -1,0 +1,85 @@
+{
+  "name": "never-forget",
+  "version": "1.0.0",
+  "description": "Never Forget, a spaced repetition learning app.",
+  "author": "tmns <tmn5@pm.me>",
+  "license": "WTFPL",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel server --out-dir dist",
+    "test": "cross-env NODE_ENV=testing jest --forceExit --detectOpenHandles",
+    "server": "nodemon --exec yarn restart",
+    "client": "npm start --prefix client",
+    "client-install": "npm install --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "restart": "rimraf dist && yarn build && yarn start",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tmns/never-forget.git"
+  },
+  "keywords": [
+    "spaced",
+    "repetition",
+    "learn",
+    "super",
+    "memo",
+    "sm",
+    "never",
+    "forget",
+    "server",
+    "backend",
+    "react",
+    "graphql",
+    "fullstack",
+    "frontend"
+  ],
+  "bugs": {
+    "url": "https://github.com/tmns/never-forget/issues"
+  },
+  "homepage": "https://github.com/tmns/never-forget#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.8.0",
+    "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0",
+    "graphql-codegen-core": "^0.18.2",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "rimraf": "^2.6.3",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "<rootDir>/test-db-setup.js"
+    ],
+    "testPathIgnorePatterns": [
+      "dist/"
+    ],
+    "restoreMocks": true
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.5.0",
+    "bcrypt": "^3.0.6",
+    "connect-mongodb-session": "^2.1.1",
+    "cuid": "^2.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.16.1",
+    "graphql": "^14.3.1",
+    "graphql-import": "^0.7.1",
+    "graphql-tools": "^4.0.4",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.5.11",
+    "ms": "^2.1.1"
+  }
+}

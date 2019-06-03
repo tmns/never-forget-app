@@ -1,0 +1,44 @@
+type User {
+  _id: ID!
+  username: String!
+}
+
+type Query {
+  isLogin: Boolean!
+  whoami: User!
+}
+
+input NewUserInput {
+  username: String!
+  password: String!
+  confirmPassword: String!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
+}
+
+input UpdateUsernameInput {
+  username: String!
+  password: String!
+}
+
+input UpdatePasswordInput {
+  password: String!
+  newPassword: String!
+  confirmPassword: String!
+}
+
+input DeleteAccountInput {
+  password: String!
+}
+
+type Mutation {
+  signup(input: NewUserInput!): User!
+  login(input: LoginUserInput!): User!
+  logout: User!
+  updateUsername(input: UpdateUsernameInput!): User!
+  updatePassword(input: UpdatePasswordInput!): User!
+  deleteAccount(input: DeleteAccountInput!): User!
+}

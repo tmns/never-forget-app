@@ -1,0 +1,43 @@
+type Card {
+  prompt: String!
+  target: String!
+  promptExample: String!
+  targetExample: String!
+  timeAdded: Int!
+  nextReview: Int!
+  intervalProgress: Int!
+  deckId: ID!
+  _id: ID!
+}
+
+extend type Query {
+  card(id: ID!): Card!
+  cards(deckId: ID!): [Card]!
+}
+
+input NewCardInput {
+  prompt: String!
+  target: String!
+  promptExample: String!
+  targetExample: String!
+  timeAdded: Int!
+  nextReview: Int!
+  intervalProgress: Int!
+  deckId: ID!
+}
+
+input UpdateCardInput {
+  prompt: String
+  target: String
+  promptExample: String
+  targetExample: String
+  timeAdded: Int
+  nextReview: Int
+  intervalProgress: Int
+}
+
+extend type Mutation {
+  newCard(input: NewCardInput!): Card!
+  updateCard(id: ID!, input: UpdateCardInput!): Card!
+  removeCard(id: ID!): Card!
+}

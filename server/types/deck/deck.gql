@@ -1,0 +1,26 @@
+type Deck {
+  name: String!
+  description: String!
+  _id: ID!
+}
+
+extend type Query {
+  deck(id: ID!): Deck!
+  decks: [Deck]!
+}
+
+input NewDeckInput {
+  name: String!
+  description: String!
+}
+
+input UpdateDeckInput {
+  name: String
+  description: String
+}
+
+extend type Mutation {
+  newDeck(input: NewDeckInput!): Deck!
+  updateDeck(id: ID!, input: UpdateDeckInput!): Deck!
+  removeDeck(id: ID!): Deck!
+}
