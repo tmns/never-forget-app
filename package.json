@@ -72,6 +72,7 @@
     "apollo-server-express": "^2.5.0",
     "bcrypt": "^3.0.6",
     "connect-mongodb-session": "^2.1.1",
+    "cors": "^2.8.5",
     "cuid": "^2.1.6",
     "express": "^4.17.1",
     "express-session": "^1.16.1",

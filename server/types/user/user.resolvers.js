@@ -16,6 +16,7 @@ import {
 } from "../../utils/auth";
 
 function isLogin(_, args, ctx) {
+  console.log(ctx.session)
   return isAuthenticated(ctx.session);
 }
 

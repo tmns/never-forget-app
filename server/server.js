@@ -5,6 +5,7 @@ import { ApolloServer } from "apollo-server-express";
 import session from "express-session";
 import { merge } from "lodash";
 import ms from "ms";
+import cors from 'cors';
 
 import { loadTypeSchema } from "./utils/schema";
 import config from "./config/config";
@@ -60,16 +61,19 @@ async function start() {
     })
   );
 
-  server.applyMiddleware({ app });
-
   const serverUrl = `${config.proto}://${config.host}:${config.port}`;
 
+  var corsOptions = {
+    origin: ['http://localhost:3000', serverUrl],
+    credentials: true
+  }
+
+  app.use(cors(corsOptions))
+
+  server.applyMiddleware({ app, cors: false });
+
   var opts = {
-    port: config.port,
-    cors: {
-      credentials: true,
-      origin: [serverUrl]
-    }
+    port: config.port
   };
 
   try {
