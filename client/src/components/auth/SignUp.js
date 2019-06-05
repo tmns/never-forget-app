@@ -118,6 +118,7 @@ function SignUp({ history, signUp, signIn }) {
                       label="Username"
                       name="username"
                       autoComplete="username"
+                      autoFocus
                       onChange={props.handleChange}
                       value={props.values.username}
                       helperText={
@@ -187,8 +188,8 @@ function SignUp({ history, signUp, signIn }) {
                 </Button>
                 <Grid container justify="flex-end">
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      Already have an account? Sign in
+                    <Link href="/signin" variant="body2">
+                      Already have an account? Sign in!
                     </Link>
                   </Grid>
                 </Grid>
