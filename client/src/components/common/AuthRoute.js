@@ -6,7 +6,7 @@ const mapStateToProps = ({ session }) => ({
   loggedIn: Boolean(session.userId)
 })
 
-const RequiresNotAuth = ({ loggedIn, component: Component, ...rest }) => (
+const AuthRoute = ({ loggedIn, component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
@@ -15,4 +15,4 @@ const RequiresNotAuth = ({ loggedIn, component: Component, ...rest }) => (
   />
 );
 
-export default connect(mapStateToProps)(RequiresNotAuth);
+export default connect(mapStateToProps)(AuthRoute);

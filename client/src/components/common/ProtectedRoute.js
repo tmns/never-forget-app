@@ -6,7 +6,7 @@ const mapStateToProps = ({ session }) => ({
   loggedIn: Boolean(session.userId)
 });
 
-const RequiresAuth = ({ loggedIn, component: Component, ...rest }) => (
+const ProtectedRoute = ({ loggedIn, component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
@@ -15,4 +15,4 @@ const RequiresAuth = ({ loggedIn, component: Component, ...rest }) => (
   />
 );
 
-export default connect(mapStateToProps)(RequiresAuth);
+export default connect(mapStateToProps)(ProtectedRoute);
