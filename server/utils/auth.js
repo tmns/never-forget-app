@@ -3,6 +3,7 @@
 import { User } from "../types/user/user.model";
 import { UserInputError } from "apollo-server-core";
 import { isValidUsername, isValidPassword} from './validation';
+import { SESS_NAME } from '../config/config'
 
 function isAuthenticated(session) {
   return session.user != undefined;
@@ -34,7 +35,7 @@ async function loginUser(username, password, session) {
 async function logoutUser(ctx) {
   var loggedOutUser = ctx.session.user;
   await ctx.session.destroy();
-  ctx.res.clearCookie('sessionId');
+  ctx.res.clearCookie(SESS_NAME);
   return loggedOutUser;
 }
 
