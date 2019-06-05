@@ -6,7 +6,11 @@ import ApolloClient from "apollo-boost";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-const client = new ApolloClient({ uri: "http://localhost:4000/graphql", credentials: "include"});
+const client = new ApolloClient({ 
+  uri: "http://localhost:4000/graphql", 
+  credentials: "include",   
+});
+
 
 const ApolloApp = AppComponent => (
   <ApolloProvider client={client}>

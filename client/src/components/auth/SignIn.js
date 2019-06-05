@@ -11,8 +11,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { gql } from "apollo-boost";
-import { Mutation } from "react-apollo";
+
+import { signIn } from "../../util/session";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -49,118 +49,108 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required("Password is required!")
 });
 
-const SIGNIN = gql`
-  mutation signin($input: LoginUserInput!) {
-    login(input: $input) {
-      username
-      _id
-    }
-  }
-`;
-
 function SignIn(props) {
   const classes = useStyles();
 
   return (
-    <Mutation mutation={SIGNIN}>
-      {(signin, { error, loading, data }) => (
-        <Fragment>
-          <Formik
-            initialValues={initialState}
-            validationSchema={validationSchema}
-            onSubmit={async (values, actions) => {
-              console.log(values);
-              const input = {
-                username: values.username,
-                password: values.password
-              };
-              try {
-                await signin({ variables: { input } });
-                actions.setSubmitting(false);
-                const { history } = props;
-                history.push("/dashboard");
-              } catch (err) {
-                actions.setSubmitting(false);
-                actions.setStatus({ msg: "Invalid username or password." });
-              }
-            }}
-          >
-            {props => (
-              <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <div className={classes.paper}>
-                  <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                  </Avatar>
-                  <Typography component="h1" variant="h5">
-                    Sign in
-                  </Typography>
-                  <form onSubmit={props.handleSubmit} className={classes.form}>
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="username"
-                      label="Username"
-                      name="username"
-                      autoComplete="username"
-                      autoFocus
-                      onChange={props.handleChange}
-                      value={props.values.username}
-                      helperText={
-                        props.touched.username ? props.errors.username : ""
-                      }
-                      error={
-                        props.touched.username && Boolean(props.errors.username)
-                      }
-                    />
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                      onChange={props.handleChange}
-                      value={props.values.password}
-                      helperText={
-                        props.touched.password ? props.errors.password : ""
-                      }
-                      error={
-                        props.touched.password && Boolean(props.errors.password)
-                      }
-                    />
-                    {props.status && props.status.msg && (
-                      <div>{props.status.msg}</div>
-                    )}
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                    >
-                      Sign In
-                    </Button>
-                    <Grid container>
-                      <Grid item>
-                        <Link href="#" variant="body2">
-                          {"Don't have an account? Sign Up"}
-                        </Link>
-                      </Grid>
-                    </Grid>
-                  </form>
-                </div>
-              </Container>
-            )}
-          </Formik>
-        </Fragment>
-      )}
-    </Mutation>
+    <Fragment>
+      <Formik
+        initialValues={initialState}
+        validationSchema={validationSchema}
+        onSubmit={async (values, actions) => {
+          console.log(values);
+          const variables = {
+            input: {
+              username: values.username,
+              password: values.password
+            }
+          };
+          try {
+            await signIn(variables);
+            actions.setSubmitting(false);
+            const { history } = props;
+            history.push("/dashboard");
+          } catch (err) {
+            console.log(err);
+            actions.setSubmitting(false);
+            actions.setStatus({ msg: "Invalid username or password." });
+          }
+        }}
+      >
+        {props => (
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign in
+              </Typography>
+              <form onSubmit={props.handleSubmit} className={classes.form}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  autoFocus
+                  onChange={props.handleChange}
+                  value={props.values.username}
+                  helperText={
+                    props.touched.username ? props.errors.username : ""
+                  }
+                  error={
+                    props.touched.username && Boolean(props.errors.username)
+                  }
+                />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={props.handleChange}
+                  value={props.values.password}
+                  helperText={
+                    props.touched.password ? props.errors.password : ""
+                  }
+                  error={
+                    props.touched.password && Boolean(props.errors.password)
+                  }
+                />
+                {props.status && props.status.msg && (
+                  <div>{props.status.msg}</div>
+                )}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Sign In
+                </Button>
+                <Grid container>
+                  <Grid item>
+                    <Link href="#" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
+                </Grid>
+              </form>
+            </div>
+          </Container>
+        )}
+      </Formik>
+    </Fragment>
   );
 }
 

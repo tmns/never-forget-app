@@ -38,6 +38,9 @@ async function start() {
 
   var app = express();
 
+  // disable leaking info of what server we're using
+  app.disable('x-powered-by');
+
   var store = new MongoDBStore({
     uri: config.dbUrl,
     collection: "sessions"

@@ -31,9 +31,10 @@ async function loginUser(username, password, session) {
   throw new UserInputError("Invalid username or password.");
 }
 
-async function logoutUser(session) {
-  var loggedOutUser = session.user;
-  await session.destroy();
+async function logoutUser(ctx) {
+  var loggedOutUser = ctx.session.user;
+  await ctx.session.destroy();
+  ctx.res.clearCookie('sessionId');
   return loggedOutUser;
 }
 

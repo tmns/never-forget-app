@@ -11,8 +11,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { gql } from "apollo-boost";
-import { Mutation } from "react-apollo";
+
+import { signUp, signIn } from '../../util/session';
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -59,146 +59,140 @@ const validationSchema = Yup.object().shape({
     .required("Password confirmation is required!")
 });
 
-const SIGNUP = gql`
-  mutation signup($input: NewUserInput!) {
-    signup(input: $input) {
-      username
-      _id
-    }
-  }
-`;
-
 function SignUp(props) {
   const classes = useStyles();
 
   return (
-    <Mutation mutation={SIGNUP}>
-      {(signup, { error, loading, data }) => (
-        <Fragment>
-          <Formik
-            initialValues={initialState}
-            validationSchema={validationSchema}
-            onSubmit={async (values, actions) => {
-              console.log(values);
-              const input = {
-                username: values.username,
-                password: values.password,
-                confirmPassword: values.confirmPassword
-              };
-              try {
-                await signup({ variables: { input } });
-                actions.setSubmitting(false);
-                const { history } = props;
-                history.push('/dashboard');
-              } catch(err) {
-                actions.setSubmitting(false);
-                actions.setStatus({ msg: 'This username is already taken, please choose a different one.' })
-              }
-            }}
-          >
-            {props => (
-              <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <div className={classes.paper}>
-                  <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                  </Avatar>
-                  <Typography component="h1" variant="h5">
-                    Sign up
-                  </Typography>
-                  <form onSubmit={props.handleSubmit} className={classes.form}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <TextField
-                          variant="outlined"
-                          required
-                          fullWidth
-                          id="username"
-                          label="Username"
-                          name="username"
-                          autoComplete="username"
-                          onChange={props.handleChange}
-                          value={props.values.username}
-                          helperText={
-                            props.touched.username ? props.errors.username : ""
-                          }
-                          error={
-                            props.touched.username &&
-                            Boolean(props.errors.username)
-                          }
-                        />
-                        {props.status && props.status.msg && <div>{props.status.msg}</div>}
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          variant="outlined"
-                          required
-                          fullWidth
-                          name="password"
-                          label="Password"
-                          type="password"
-                          id="password"
-                          autoComplete="current-password"
-                          onChange={props.handleChange}
-                          value={props.values.password}
-                          helperText={
-                            props.touched.password ? props.errors.password : ""
-                          }
-                          error={
-                            props.touched.password &&
-                            Boolean(props.errors.password)
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          variant="outlined"
-                          required
-                          fullWidth
-                          name="confirmPassword"
-                          label="Confirm Password"
-                          type="password"
-                          id="confirmPassword"
-                          autoComplete="current-password"
-                          onChange={props.handleChange}
-                          value={props.values.confirmPassword}
-                          helperText={
-                            props.touched.confirmPassword
-                              ? props.errors.confirmPassword
-                              : ""
-                          }
-                          error={
-                            props.touched.confirmPassword &&
-                            Boolean(props.errors.confirmPassword)
-                          }
-                        />
-                      </Grid>
-                    </Grid>
-                    <Button
-                      type="submit"
+    <Fragment>
+      <Formik
+        initialValues={initialState}
+        validationSchema={validationSchema}
+        onSubmit={async (values, actions) => {
+          console.log(values);
+          const variables = {
+            input: {
+              username: values.username,
+              password: values.password,
+              confirmPassword: values.confirmPassword
+            }
+          };
+          try {
+            await signUp(variables);
+            actions.setSubmitting(false);
+            await signIn({input: {username: values.username, password: values.password}});
+            const { history } = props;
+            history.push("/dashboard");
+          } catch (err) {
+            console.log(err);
+            actions.setSubmitting(false);
+            actions.setStatus({
+              msg:
+                "This username is already taken, please choose a different one."
+            });
+          }
+        }}
+      >
+        {props => (
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign up
+              </Typography>
+              <form onSubmit={props.handleSubmit} className={classes.form}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
                       fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                      disabled={!props.dirty || props.isSubmitting}
-                    >
-                      Sign Up
-                    </Button>
-                    <Grid container justify="flex-end">
-                      <Grid item>
-                        <Link href="#" variant="body2">
-                          Already have an account? Sign in
-                        </Link>
-                      </Grid>
-                    </Grid>
-                  </form>
-                </div>
-              </Container>
-            )}
-          </Formik>
-        </Fragment>
-      )}
-    </Mutation>
+                      id="username"
+                      label="Username"
+                      name="username"
+                      autoComplete="username"
+                      onChange={props.handleChange}
+                      value={props.values.username}
+                      helperText={
+                        props.touched.username ? props.errors.username : ""
+                      }
+                      error={
+                        props.touched.username && Boolean(props.errors.username)
+                      }
+                    />
+                    {props.status && props.status.msg && (
+                      <div>{props.status.msg}</div>
+                    )}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      onChange={props.handleChange}
+                      value={props.values.password}
+                      helperText={
+                        props.touched.password ? props.errors.password : ""
+                      }
+                      error={
+                        props.touched.password && Boolean(props.errors.password)
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="confirmPassword"
+                      label="Confirm Password"
+                      type="password"
+                      id="confirmPassword"
+                      autoComplete="current-password"
+                      onChange={props.handleChange}
+                      value={props.values.confirmPassword}
+                      helperText={
+                        props.touched.confirmPassword
+                          ? props.errors.confirmPassword
+                          : ""
+                      }
+                      error={
+                        props.touched.confirmPassword &&
+                        Boolean(props.errors.confirmPassword)
+                      }
+                    />
+                  </Grid>
+                </Grid>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  disabled={!props.dirty || props.isSubmitting}
+                >
+                  Sign Up
+                </Button>
+                <Grid container justify="flex-end">
+                  <Grid item>
+                    <Link href="#" variant="body2">
+                      Already have an account? Sign in
+                    </Link>
+                  </Grid>
+                </Grid>
+              </form>
+            </div>
+          </Container>
+        )}
+      </Formik>
+    </Fragment>
   );
 }
 

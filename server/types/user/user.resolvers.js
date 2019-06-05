@@ -113,7 +113,7 @@ async function logout(_, args, ctx) {
   if (!isAuthenticated(ctx.session)) {
     throw new AuthenticationError("User not authenticated");
   }
-  return await logoutUser(ctx.session);
+  return await logoutUser(ctx);
 }
 
 async function deleteAccount(_, args, ctx) {
