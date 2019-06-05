@@ -11,8 +11,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { connect } from 'react-redux';
 
-import { signIn } from "../../util/session";
+import { signIn } from "../../actions/session";
+
+const mapDispatchToProps = dispatch => ({
+  signIn: variables => dispatch(signIn(variables))
+})
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -49,7 +54,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required("Password is required!")
 });
 
-function SignIn(props) {
+function SignIn({ history, signIn}) {
   const classes = useStyles();
 
   return (
@@ -68,7 +73,6 @@ function SignIn(props) {
           try {
             await signIn(variables);
             actions.setSubmitting(false);
-            const { history } = props;
             history.push("/dashboard");
           } catch (err) {
             console.log(err);
@@ -154,4 +158,4 @@ function SignIn(props) {
   );
 }
 
-export default SignIn;
+export default connect(null, mapDispatchToProps)(SignIn);

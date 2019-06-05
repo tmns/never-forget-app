@@ -1,23 +1,18 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
 
-// import AuthContext from "../../context/auth";
+const mapStateToProps = ({ session }) => ({
+  loggedIn: Boolean(session.userId)
+})
 
-const RequiresNotAuth = ({ component: Component, ...rest }) => (
-  // <AuthContext.Consumer>
-  //   {(isLoggedIn, _) => (
-      <Route
-        {...rest}
-        render={props =>
-          true ? (
-            <Component {...props} />
-          ) : (
-            <Redirect to="/dashboard" />
-          )
-        }
-      />
-  //   )}
-  // </AuthContext.Consumer>
+const RequiresNotAuth = ({ loggedIn, component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      !loggedIn ? <Component {...props} /> : <Redirect to="/dashboard" />
+    }
+  />
 );
 
-export default RequiresNotAuth;
+export default connect(mapStateToProps)(RequiresNotAuth);

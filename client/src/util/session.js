@@ -5,6 +5,21 @@ const client = new ApolloClient({
   credentials: "include"
 });
 
+const isLoginQuery = gql`
+  {
+    isLogin
+  }
+`;
+
+const whoamiQuery = gql`
+  {
+    whoami {
+      username
+      _id
+    }
+  }
+`;
+
 const signUpMutation = gql`
   mutation signup($input: NewUserInput!) {
     signup(input: $input) {
@@ -32,12 +47,32 @@ const signOutMutation = gql`
   }
 `;
 
+async function checkLoggedIn(preloadedState) {
+  var data = await client.query({ query: isLoginQuery });
+  if (data.data.isLogin) {
+    data = await client.query({ query: whoamiQuery });
+    preloadedState = {
+      session: {
+        username: data.data.whoami.username,
+        userId: data.data.whoami._id
+      }
+    }
+  } else {
+    preloadedState = {};
+  }
+  return preloadedState;
+}
+
 async function signUp(variables) {
   return await client.mutate({ mutation: signUpMutation, variables });
 }
 
 async function signIn(variables) {
-  return await client.mutate({ mutation: signInMutation, variables });
+  var data = await client.mutate({ mutation: signInMutation, variables });
+  return {
+    username: data.data.login.username,
+    userId: data.data.login._id
+  }
 }
 
 async function signOut() {
@@ -45,6 +80,7 @@ async function signOut() {
 }
 
 export {
+  checkLoggedIn,
   signUp,
   signIn,
   signOut
