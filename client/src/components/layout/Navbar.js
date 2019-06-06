@@ -6,14 +6,17 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { ThemeProvider } from '@material-ui/styles';
 
 import { signOut } from "../../actions/session";
 
+import CustomTheme from './CustomTheme';
+
 const useStyles = makeStyles(theme => ({
-  "@global": {
-    body: {
-      backgroundColor: theme.palette.common.white
-    },
+  appBar: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    backgroundColor: CustomTheme.palette.primary.main,
+    color: CustomTheme.palette.secondary.main,
     ul: {
       margin: 0,
       padding: 0
@@ -22,23 +25,22 @@ const useStyles = makeStyles(theme => ({
       listStyle: "none"
     }
   },
-  appBar: {
-    borderBottom: `1px solid ${theme.palette.divider}`
-  },
   toolbar: {
     flexWrap: "wrap"
   },
   toolbarTitle: {
-    flexGrow: 1
+    flexGrow: 1,
+    fontWeight: 300
   },
   link: {
-    margin: theme.spacing(1, 1.5)
+    margin: theme.spacing(1, 1.5),
+    color: CustomTheme.palette.secondary.main,
+    borderColor: CustomTheme.palette.secondary.main
   }
 }));
 
 function Navbar({ signOut, loggedIn }) {
   const classes = useStyles();
-
   const guestLinks = (
     <nav>
       <Button
@@ -75,25 +77,27 @@ function Navbar({ signOut, loggedIn }) {
 
   return (
     <Fragment>
-      <CssBaseline />
-      <AppBar
-        position="static"
-        color="default"
-        elevation={0}
-        className={classes.appBar}
-      >
-        <Toolbar className={classes.toolbar}>
-          <Typography
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.toolbarTitle}
-          >
-            {loggedIn ? 'Dashboard' : 'Never Forget'}
-          </Typography>
-          {loggedIn ? authLinks : guestLinks}
-        </Toolbar>
-      </AppBar>
+      <ThemeProvider theme={CustomTheme}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          color="default"
+          elevation={3}
+          className={classes.appBar}
+        >
+          <Toolbar className={classes.toolbar}>
+            <Typography
+              variant="h6"
+              color="inherit"
+              noWrap
+              className={classes.toolbarTitle}
+            >
+              {loggedIn ? 'Dashboard' : 'Never Forget'}
+            </Typography>
+            {loggedIn ? authLinks : guestLinks}
+          </Toolbar>
+        </AppBar>
+      </ThemeProvider>
     </Fragment>
   );
 }
