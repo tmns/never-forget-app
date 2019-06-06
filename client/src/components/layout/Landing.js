@@ -13,13 +13,17 @@ const useStyles = makeStyles(theme => ({
     body: {
       backgroundColor: CustomTheme.palette.primary.main,
       color: CustomTheme.palette.primary.contrastText
-    },
-    paper: {
-      marginTop: theme.spacing(8),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
     }
+  },
+  paper: {
+    marginTop: theme.spacing(15),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    fontWeight: 300
+  },
+  header: {
+    margin: theme.spacing(2)
   }
 }));
 
@@ -29,12 +33,15 @@ function Landing() {
   return (
     <Fragment>
       <ThemeProvider theme={CustomTheme}>
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="md">
           <CssBaseline />
           <Navbar />
           <div className={classes.paper}>
-            <Typography component="h1" variant="h5">
-              Sign in
+            <Typography className={classes.header} component="h1" variant="h3">
+              Welcome to Never Forget
+            </Typography>
+            <Typography className={classes.header} component="h4">
+              A Spaced Repetition Learning App
             </Typography>
           </div>
         </Container>

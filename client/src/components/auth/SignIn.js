@@ -47,7 +47,8 @@ const useStyles = makeStyles(theme => ({
     "&:-webkit-autofill": {
       "-webkit-box-shadow": `inset 0 0 0px 9999px ${
         CustomTheme.palette.primary.main
-      }`
+      }`,
+      "-webkit-text-fill-color": CustomTheme.palette.secondary.main
     }
   },
   submit: {
