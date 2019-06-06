@@ -8,15 +8,9 @@ import Link from "@material-ui/core/Link";
 import CustomTheme from "../layout/CustomTheme";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    minHeight: "65vh"
-  },
   footer: {
     borderTop: `1px solid ${theme.palette.divider}`,
     paddingTop: theme.spacing(5),
-    marginTop: "auto",
     backgroundColor: CustomTheme.palette.primary.main,
     color: CustomTheme.palette.primary.contrastText
   },
@@ -36,7 +30,7 @@ export default function StickyFooter() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div>
       <CssBaseline />
       <footer className={classes.footer}>
         <Container maxWidth="sm" align="center">

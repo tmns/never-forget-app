@@ -7,6 +7,7 @@ import { ThemeProvider } from "@material-ui/styles";
 
 import CustomTheme from "./CustomTheme";
 import Navbar from "./Navbar";
+import FlashCard from '../flashcard/FlashCard'
 import Footer from './Footer';
 
 const useStyles = makeStyles(theme => ({
@@ -44,6 +45,7 @@ function Landing() {
             <Typography className={classes.header} component="h4">
               A Spaced Repetition Learning App
             </Typography>
+            <FlashCard />
           </div>
         </Container>
         <Footer />
