@@ -1,22 +1,19 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import {signOut} from '../../actions/session';
+import Navbar from '../layout/Navbar';
 
-const Dashboard = ({ signOut, session }) => (
-  <div>
-    <h1>Dashboard</h1>
+const Dashboard = ({ session }) => (
+  <Fragment>
+    <Navbar />
+    <div>
     <h2>Hi {session.username}</h2>
-    <button onClick={signOut}>Logout</button>
   </div>
+  </Fragment>
 )
 
 const mapStateToProps = ({ session }) => ({
   session
 })
 
-const mapDispatchToProps = dispatch => ({
-  signOut: () => dispatch(signOut())
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps)(Dashboard);
