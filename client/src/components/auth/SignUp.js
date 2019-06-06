@@ -1,11 +1,12 @@
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
@@ -29,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(5),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -62,6 +63,10 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       color: CustomTheme.palette.secondary.dark
     }
+  },
+  arrow: {
+    marginTop: theme.spacing(5),
+    color: CustomTheme.palette.secondary.main
   }
 }));
 
@@ -143,6 +148,11 @@ function SignUp({ history, signUp, signIn }) {
       >
         {props => (
           <ThemeProvider theme={CustomTheme}>
+            <Container className={classes.arrow}>
+              <Link className={classes.link} to="/">
+                <ArrowBackOutlinedIcon />
+              </Link>
+            </Container>
             <Container component="main" maxWidth="xs">
               <CssBaseline />
               <div className={classes.paper}>
@@ -265,7 +275,11 @@ function SignUp({ history, signUp, signIn }) {
                   </Button>
                   <Grid container justify="flex-end">
                     <Grid item>
-                      <Link className={classes.link} href="/signin" variant="body2">
+                      <Link
+                        className={classes.link}
+                        to="/signin"
+                        variant="body2"
+                      >
                         Already have an account? Sign in!
                       </Link>
                     </Grid>

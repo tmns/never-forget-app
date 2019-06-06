@@ -5,8 +5,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 
-import Navbar from "./Navbar";
 import CustomTheme from "./CustomTheme";
+import Navbar from "./Navbar";
+import Footer from './Footer';
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -33,11 +34,11 @@ function Landing() {
   return (
     <Fragment>
       <ThemeProvider theme={CustomTheme}>
-        <Container component="main" maxWidth="md">
-          <CssBaseline />
-          <Navbar />
+        <CssBaseline />
+        <Navbar />
+        <Container component="main" maxWidth="sm">
           <div className={classes.paper}>
-            <Typography className={classes.header} component="h1" variant="h3">
+            <Typography className={classes.header} component="h1" variant="h3" align="center">
               Welcome to Never Forget
             </Typography>
             <Typography className={classes.header} component="h4">
@@ -45,6 +46,7 @@ function Landing() {
             </Typography>
           </div>
         </Container>
+        <Footer />
       </ThemeProvider>
     </Fragment>
   );

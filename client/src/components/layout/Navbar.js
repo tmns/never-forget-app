@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
@@ -6,11 +7,11 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from "@material-ui/styles";
 
 import { signOut } from "../../actions/session";
 
-import CustomTheme from './CustomTheme';
+import CustomTheme from "./CustomTheme";
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 300
   },
   link: {
+    textDecoration: "none !important",
     margin: theme.spacing(1, 1.5),
     color: CustomTheme.palette.secondary.main,
     borderColor: CustomTheme.palette.secondary.main
@@ -44,7 +46,8 @@ function Navbar({ signOut, loggedIn }) {
   const guestLinks = (
     <nav>
       <Button
-        href="/signin"
+        component={Link}
+        to="/signin"
         color="primary"
         variant="outlined"
         className={classes.link}
@@ -52,7 +55,8 @@ function Navbar({ signOut, loggedIn }) {
         Sign In
       </Button>
       <Button
-        href="/signup"
+        component={Link}
+        to="/signup"
         color="primary"
         variant="outlined"
         className={classes.link}
@@ -92,7 +96,7 @@ function Navbar({ signOut, loggedIn }) {
               noWrap
               className={classes.toolbarTitle}
             >
-              {loggedIn ? 'Dashboard' : 'Never Forget'}
+              {loggedIn ? "Dashboard" : "Never Forget"}
             </Typography>
             {loggedIn ? authLinks : guestLinks}
           </Toolbar>
