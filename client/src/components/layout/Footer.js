@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
   footer: {
     borderTop: `1px solid ${theme.palette.divider}`,
     paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(5),
     backgroundColor: CustomTheme.palette.primary.main,
     color: CustomTheme.palette.primary.contrastText
   },
@@ -38,7 +39,7 @@ export default function StickyFooter() {
             {"crafted with "}
             <span className={classes.heart}>❤</span>
             {" by "}
-            <Link className={classes.link} href="https://github.com/tmns">
+            <Link className={classes.link} href="https://github.com/tmns" target="_blank">
               @tmns
             </Link>
           </Typography>
