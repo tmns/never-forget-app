@@ -67,12 +67,12 @@ function ReviewCard(props) {
 
   const [expanded, setExpanded] = React.useState(false);
 
-  const initialState = {
-    cards: props.cards,
-    reviewFinished: false
-  }
-
-  const [session, setSession] = React.useState(initialState);
+  const [session, setSession] = React.useState(
+    {
+      cards: props.cards,
+      reviewFinished: false
+    }
+  );
 
   function handleExpandClick() {
     setExpanded(!expanded);
