@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   credentials: "include"
-})
+});
 
 const decksQuery = gql`
   {
@@ -40,33 +40,43 @@ const decksQuery = gql`
   }
 `;
 
-var deckData = {
-  columns: [
-    { title: 'Name', field: 'name' },
-    { title: 'Description', field: 'description' },
-    { title: 'Total Cards', field: 'totalCards', type: 'numeric' },
-    { title: 'Cards to Review', field: 'dueCards', type: 'numeric' },
-  ],
-  data: {} 
-}
 
-async function getDeckData() {
-  // fetch decks
-  var data = await client.query({ query: decksQuery });
-  var details = data.data.decks.map(deckObject => ({ name: deckObject.name, description: deckObject.description}));
-
-  // to do: get number of cards in each deck + cards due for review
-  deckData.data = details;
-}
-
-(async () => {
-  await getDeckData();
-})();
-
-const Dashboard = ({ session }) => {
+const Dashboard = ({ session, size }) => {
   const classes = useStyles();
+  
+  var [deckData, setDeckData] = React.useState(
+    {
+      columns: [
+        { title: "Name", field: "name" },
+        { title: "Description", field: "description" },
+        { title: "Total Cards", field: "totalCards", type: "numeric" },
+        { title: "Cards to Review", field: "dueCards", type: "numeric" }
+      ],
+      data: []
+    }
+  );
 
-  console.log(deckData)
+  React.useEffect(() => {
+    async function getDeckData() {
+      // fetch decks
+      try {
+        var data = await client.query({
+          query: decksQuery,
+          fetchPolicy: "no-cache"
+        });
+        var details = data.data.decks.map(deckObject => ({
+          name: deckObject.name,
+          description: deckObject.description
+        }));
+        setDeckData({...deckData, data: details});
+        // to do: get number of cards in each deck + cards due for review
+      } catch (err) {
+        // handle error
+      }
+    }
+    getDeckData();
+  }, [])
+
   return (
     <Fragment>
       <Navbar />
@@ -82,7 +92,7 @@ const Dashboard = ({ session }) => {
         >
           Welcome back, {session.username}!
         </Typography>
-        <Table title='Decks' data={deckData}/>
+        <Table title="Decks" data={deckData} />
       </Container>
       <Footer />
     </Fragment>

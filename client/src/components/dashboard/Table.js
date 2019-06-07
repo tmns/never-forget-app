@@ -38,7 +38,11 @@ const tableIcons = {
 
 function Table(props) {
   const [state, setState] = React.useState(props.data);
-
+  
+  React.useEffect(() => {
+    setState(props.data)
+  }, [props.data])
+  
   return (
     <MaterialTable
       icons={tableIcons}
