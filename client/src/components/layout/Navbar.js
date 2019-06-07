@@ -96,7 +96,9 @@ function Navbar({ signOut, loggedIn }) {
               noWrap
               className={classes.toolbarTitle}
             >
+              <Link className={classes.link} to={loggedIn ? "/dashboard" : "/"}>
               {loggedIn ? "Dashboard" : "Never Forget"}
+              </Link>
             </Typography>
             {loggedIn ? authLinks : guestLinks}
           </Toolbar>
