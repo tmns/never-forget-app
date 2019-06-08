@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutline";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Divider from "@material-ui/core/Divider";
+import { Tooltip } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -67,12 +68,10 @@ function ReviewCard(props) {
 
   const [expanded, setExpanded] = React.useState(false);
 
-  const [session, setSession] = React.useState(
-    {
-      cards: props.cards,
-      reviewFinished: false
-    }
-  );
+  const [session, setSession] = React.useState({
+    cards: props.cards,
+    reviewFinished: false
+  });
 
   function handleExpandClick() {
     setExpanded(!expanded);
@@ -92,13 +91,16 @@ function ReviewCard(props) {
       } else {
         setSession({
           reviewFinished: true,
-          cards: [{ 
-            prompt: 'All cards reviewed!',
-            promptExample: 'Great job! You have reviewed all the cards for this deck. Check back soon for another review!'          
-          }]
-        })
+          cards: [
+            {
+              prompt: "All cards reviewed!",
+              promptExample:
+                "Great job! You have reviewed all the cards for this deck. Check back soon for another review!"
+            }
+          ]
+        });
       }
-    }, 200)
+    }, 200);
   }
 
   function handleYesClick() {
@@ -114,18 +116,22 @@ function ReviewCard(props) {
       } else {
         setSession({
           reviewFinished: true,
-          cards: [{ 
-            prompt: 'All cards reviewed!',
-            promptExample: 'Great job! You have reviewed all the cards for this deck. Check back soon for another review!'          
-          }]
-        })
+          cards: [
+            {
+              prompt: "All cards reviewed!",
+              promptExample:
+                "Great job! You have reviewed all the cards for this deck. Check back soon for another review!"
+            }
+          ]
+        });
       }
     }, 200);
   }
 
   return (
     <Card className={classes.card}>
-      <CardHeader className={classes.header}
+      <CardHeader
+        className={classes.header}
         action={
           <IconButton aria-label="Settings">
             <MoreVertIcon />
@@ -141,31 +147,34 @@ function ReviewCard(props) {
           {session.cards[0].promptExample}
         </Typography>
       </CardContent>
-      <div className={session.reviewFinished ? classes.hide : ''}>
-      <StyledActions>
-        <IconButton 
-          aria-label="Mark not remembered"
-          onClick={handleNoClick}
-        >
-          <NotInterestedIcon />
-        </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="Show target"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-        <IconButton 
-          aria-label="Mark remembered"
-          onClick={handleYesClick}  
-        >
-          <CheckCircleOutlinedIcon />
-        </IconButton>
-      </StyledActions>
+      <div className={session.reviewFinished ? classes.hide : ""}>
+        <StyledActions>
+          <Tooltip title="This was hard!">
+            <IconButton
+              aria-label="Mark not remembered"
+              onClick={handleNoClick}
+            >
+              <NotInterestedIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Show Answer">
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="Show target"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="This was easy!">
+            <IconButton aria-label="Mark remembered" onClick={handleYesClick}>
+              <CheckCircleOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+        </StyledActions>
       </div>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>

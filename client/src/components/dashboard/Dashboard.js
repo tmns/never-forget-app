@@ -48,9 +48,7 @@ const Dashboard = ({ session, size }) => {
     {
       columns: [
         { title: "Name", field: "name" },
-        { title: "Description", field: "description" },
-        { title: "Total Cards", field: "totalCards", type: "numeric" },
-        { title: "Cards to Review", field: "dueCards", type: "numeric" }
+        { title: "Description", field: "description" }
       ],
       data: []
     }
@@ -81,7 +79,7 @@ const Dashboard = ({ session, size }) => {
     <Fragment>
       <Navbar />
       <CssBaseline />
-      <Container component="main" maxWidth="md">
+      <Container component="main" maxWidth="sm">
         <Typography
           component="h1"
           variant="h5"
