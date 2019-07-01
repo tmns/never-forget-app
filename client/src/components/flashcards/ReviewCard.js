@@ -100,7 +100,7 @@ function ReviewCard(props) {
           ]
         });
       }
-    }, 200);
+    }, 250);
   }
 
   function handleYesClick() {
@@ -125,7 +125,7 @@ function ReviewCard(props) {
           ]
         });
       }
-    }, 200);
+    }, 250);
   }
 
   return (

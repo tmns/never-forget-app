@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import resolvers from "../user.resolvers";
 import { User } from "../user.model.js";
 import { MemoryStore, Cookie } from "express-session";
+import http from "http";
 
 describe("User Resolvers", () => {
   test("isLogin returns true if user object acttached to session", () => {
@@ -537,10 +538,15 @@ describe("User Resolvers", () => {
 
     // mock session object building
     var ctx = {
-      sessionStore: new MemoryStore()
+      sessionStore: new MemoryStore(),
+      res: Object.create(http.ServerResponse.prototype)
     };
 
     var cookie = new Cookie();
+
+    console.log(cookie);
+
+    // res.cookie()
 
     // adds valid session object to ctx
     ctx.sessionStore.createSession(ctx, { cookie });

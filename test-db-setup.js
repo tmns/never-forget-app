@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import cuid from "cuid";
-import config from "./server/config/config";
+import { DB_URI } from "./server/config/config";
 import _ from "lodash";
 import { User } from "./server/types/user/user.model";
 
@@ -25,7 +25,7 @@ beforeEach(async done => {
 
   if (mongoose.connection.readyState === 0) {
     try {
-      await mongoose.connect(config.dbUrl + db, {
+      await mongoose.connect(DB_URI + db, {
         useNewUrlParser: true,
         autoIndex: true
       });
