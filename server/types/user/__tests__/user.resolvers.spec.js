@@ -7,7 +7,9 @@ import bcrypt from "bcrypt";
 import resolvers from "../user.resolvers";
 import { User } from "../user.model.js";
 import { MemoryStore, Cookie } from "express-session";
-import http from "http";
+import { response } from "express";
+import http from 'http';
+import { SESS_NAME } from "../../../config/config";
 
 describe("User Resolvers", () => {
   test("isLogin returns true if user object acttached to session", () => {
@@ -537,16 +539,23 @@ describe("User Resolvers", () => {
     };
 
     // mock session object building
+    // TODO: figure out way to test cookie removal
     var ctx = {
       sessionStore: new MemoryStore(),
-      res: Object.create(http.ServerResponse.prototype)
-    };
+      res: {
+        ...response,
+        req: {
+          secret: 'test'
+        },
+        getHeader: http.ServerResponse.prototype.getHeader
+      }
+    }; 
+
+    console.log(ctx.res)
 
     var cookie = new Cookie();
 
-    console.log(cookie);
-
-    // res.cookie()
+    ctx.res.cookie(SESS_NAME, 'test')
 
     // adds valid session object to ctx
     ctx.sessionStore.createSession(ctx, { cookie });

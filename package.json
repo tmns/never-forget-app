@@ -7,7 +7,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel server --out-dir dist",
-    "test": "cross-env NODE_ENV=testing jest --forceExit --detectOpenHandles",
+    "test": "cross-env NODE_ENV=testing jest --detectOpenHandles",
     "server": "nodemon --exec yarn restart",
     "client": "npm start --prefix client",
     "client-install": "npm install --prefix client",
