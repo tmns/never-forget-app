@@ -13,6 +13,8 @@ import red from "@material-ui/core/colors/red";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutline";
+import ThumbUp from "@material-ui/icons/ThumbUp";
+import ThumbDown from "@material-ui/icons/ThumbDown";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Divider from "@material-ui/core/Divider";
 import { Tooltip } from "@material-ui/core";
@@ -154,7 +156,7 @@ function ReviewCard(props) {
               aria-label="Mark not remembered"
               onClick={handleNoClick}
             >
-              <NotInterestedIcon />
+              <ThumbDown />
             </IconButton>
           </Tooltip>
           <Tooltip title="Show Answer">
@@ -171,7 +173,7 @@ function ReviewCard(props) {
           </Tooltip>
           <Tooltip title="This was easy!">
             <IconButton aria-label="Mark remembered" onClick={handleYesClick}>
-              <CheckCircleOutlinedIcon />
+              <ThumbUp />
             </IconButton>
           </Tooltip>
         </StyledActions>
