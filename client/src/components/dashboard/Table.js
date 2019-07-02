@@ -15,7 +15,8 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import OfflineBolt from '@material-ui/icons/OfflineBolt'
+import OfflineBolt from '@material-ui/icons/OfflineBolt';
+import ApolloClient, { gql } from "apollo-boost";
 
 const tableIcons = {
   Add: AddBox,
@@ -37,6 +38,24 @@ const tableIcons = {
   ViewColumn: ViewColumn
 };
 
+const client = new ApolloClient({
+  uri: "http://localhost:4000/graphql",
+  credentials: "include"
+});
+
+const addDeckMutation = gql`
+  mutation CreateNewDeck($input: NewDeckInput!) {
+    newDeck(input: $input) {
+      name
+      description
+    }
+  }
+`;
+
+async function addDeck(variables) {
+  return await client.mutate({ mutation: addDeckMutation, variables});
+}
+
 function Table(props) {
   const [state, setState] = React.useState(props.data);
 
@@ -53,11 +72,23 @@ function Table(props) {
       editable={{
         onRowAdd: newData =>
           new Promise(resolve => {
-            setTimeout(() => {
+            setTimeout(async () => {
               resolve();
               const data = [...state.data];
               data.push(newData);
               setState({ ...state, data });
+              
+              // update database
+              try {
+                await addDeck({ 
+                  input: {
+                    name: newData.name, 
+                    description: newData.description
+                  }
+                })
+              }  catch(e) {
+                console.log(e)
+              }
             }, 600);
           }),
         onRowUpdate: (newData, oldData) =>
