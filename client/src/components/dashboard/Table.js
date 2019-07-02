@@ -52,6 +52,41 @@ const addDeckMutation = gql`
   }
 `;
 
+const removeDeckMutation = gql`
+  mutation RemoveDeck($id: ID!) {
+    removeDeck(id: $id) {
+      name
+      description
+    }
+  }
+`;
+
+const decksQuery = gql`
+  {
+    decks {
+      name
+      _id
+    }
+  }
+`;
+
+async function removeDeck(name) {
+  var data = await client.query({
+    query: decksQuery,
+    fetchPolicy: "no-cache"
+  });
+  var decks = data.data.decks;
+  var variables = {
+    id: decks.filter(deck => deck.name == name)[0]._id
+  }
+
+  try {
+    return await client.mutate({ mutation: removeDeckMutation, variables})
+  } catch(e) {
+    console.log(e)
+  }
+}
+
 async function addDeck(variables) {
   return await client.mutate({ mutation: addDeckMutation, variables});
 }
@@ -77,8 +112,8 @@ function Table(props) {
               const data = [...state.data];
               data.push(newData);
               setState({ ...state, data });
-              
-              // update database
+
+              // add deck to database
               try {
                 await addDeck({ 
                   input: {
@@ -102,11 +137,18 @@ function Table(props) {
           }),
         onRowDelete: oldData =>
           new Promise(resolve => {
-            setTimeout(() => {
+            setTimeout(async () => {
               resolve();
               const data = [...state.data];
               data.splice(data.indexOf(oldData), 1);
               setState({ ...state, data });
+
+              // remove deck fom database
+              try {
+                await removeDeck(oldData.name)
+              } catch(e) {
+                console.log(e);
+              }
             }, 600);
           })
       }}
