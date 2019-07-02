@@ -47,8 +47,7 @@ const Dashboard = ({ session, size }) => {
   var [deckData, setDeckData] = React.useState(
     {
       columns: [
-        { title: "Name", field: "name" },
-        { title: "Description", field: "description" }
+        { title: "Name", field: "name" }
       ],
       data: []
     }

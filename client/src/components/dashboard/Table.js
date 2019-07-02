@@ -113,6 +113,28 @@ function Table(props) {
       title={props.title}
       columns={state.columns}
       data={state.data}
+      detailPanel={[
+        {
+          tooltip: "Show Description",
+          render: rowData => {
+            return (
+              <div
+                style={{
+                  fontSize: 15,
+                  paddingTop: '15px',
+                  paddingBottom: '15px',
+                  paddingLeft: '15px',
+                  textAlign: 'left',
+                  color: 'black',
+                  backgroundColor: '#ffff',
+                }}
+              >
+                {rowData.description}
+              </div>
+            )
+          }
+        }
+      ]}
       editable={{
         onRowAdd: newData =>
           new Promise(resolve => {
