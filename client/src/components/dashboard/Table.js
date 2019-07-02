@@ -15,6 +15,7 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import OfflineBolt from '@material-ui/icons/OfflineBolt'
 
 const tableIcons = {
   Add: AddBox,
@@ -78,6 +79,18 @@ function Table(props) {
             }, 600);
           })
       }}
+      actions={[
+        {
+          icon: OfflineBolt,
+          tooltip: 'Study',
+          onClick: (event, rowData) => console.log(event, rowData)
+        },
+        {
+          icon: Search,
+          tooltip: 'Browse',
+          onClick: (event, rowData) => console.log(event, rowData)
+        }
+      ]}  
       options={{
         actionsColumnIndex: -1
       }}
