@@ -43,9 +43,27 @@ const client = new ApolloClient({
   credentials: "include"
 });
 
+const decksQuery = gql`
+  {
+    decks {
+      name
+      _id
+    }
+  }
+`;
+
 const addDeckMutation = gql`
   mutation CreateNewDeck($input: NewDeckInput!) {
     newDeck(input: $input) {
+      name
+      description
+    }
+  }
+`;
+
+const updateDeckMutation = gql`
+  mutation UpdateDeck($id: ID!, $input: UpdateDeckInput!) {
+    updateDeck(id: $id, input: $input) {
       name
       description
     }
@@ -61,34 +79,25 @@ const removeDeckMutation = gql`
   }
 `;
 
-const decksQuery = gql`
-  {
-    decks {
-      name
-      _id
-    }
-  }
-`;
-
-async function removeDeck(name) {
+async function getDeckId(name) {
   var data = await client.query({
     query: decksQuery,
     fetchPolicy: "no-cache"
   });
   var decks = data.data.decks;
-  var variables = {
-    id: decks.filter(deck => deck.name == name)[0]._id
-  }
-
-  try {
-    return await client.mutate({ mutation: removeDeckMutation, variables})
-  } catch(e) {
-    console.log(e)
-  }
+  return decks.filter(deck => deck.name == name)[0]._id
 }
 
 async function addDeck(variables) {
   return await client.mutate({ mutation: addDeckMutation, variables});
+}
+
+async function updateDeck(variables) {
+  return await client.mutate({ mutation: updateDeckMutation, variables })
+}
+
+async function removeDeck(variables) {
+  return await client.mutate({ mutation: removeDeckMutation, variables})
 }
 
 function Table(props) {
@@ -128,11 +137,26 @@ function Table(props) {
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise(resolve => {
-            setTimeout(() => {
+            setTimeout(async () => {
               resolve();
               const data = [...state.data];
               data[data.indexOf(oldData)] = newData;
               setState({ ...state, data });
+
+              // update deck in database
+              var id = await getDeckId(oldData.name);
+              var variables = { 
+                input: {
+                  name: newData.name,
+                  description: newData.description
+                },
+                id
+              }
+              try {
+                return await updateDeck(variables);
+              } catch(e) {
+                console.log(e);
+              }
             }, 600);
           }),
         onRowDelete: oldData =>
@@ -144,8 +168,10 @@ function Table(props) {
               setState({ ...state, data });
 
               // remove deck fom database
+              var id = getDeckId(oldData.name);
+              var variables = { id };
               try {
-                await removeDeck(oldData.name)
+                await removeDeck(variables)
               } catch(e) {
                 console.log(e);
               }

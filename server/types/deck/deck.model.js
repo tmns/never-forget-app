@@ -59,7 +59,7 @@ deckSchema.statics.findAndUpdateDeck = async function(_id, props, createdBy) {
   var tProps = trimProps(props);
 
   // if user updating name, check if another deck already exists with same name
-  if (tProps.hasOwnProperty("name")) {
+  if (tProps.hasOwnProperty("name") && tProps.name != foundDeck.name) {
     var foundDeckWithSameName = await this.findOne({
       name: tProps.name,
       createdBy
