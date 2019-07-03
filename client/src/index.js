@@ -8,11 +8,7 @@ import App from "./App";
 import configureStore from './store/store';
 import { checkLoggedIn } from './util/session';
 import * as serviceWorker from "./serviceWorker";
-
-const client = new ApolloClient({ 
-  uri: "http://localhost:4000/graphql", 
-  credentials: "include",   
-});
+import client from "./apollo/client";
 
 const renderApp = preloadedState => {
   const store = configureStore(preloadedState);

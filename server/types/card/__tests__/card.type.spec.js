@@ -111,6 +111,7 @@ describe("Card schema", () => {
     var query = `
       {
         cards(deckId: "123123") {
+          prompt
           target
           promptExample
           targetExample
@@ -132,6 +133,7 @@ describe("Card schema", () => {
     var query = `
       mutation CreateNewCard($input: NewCardInput!) {
         newCard(input: $input) {
+          prompt
           target
           promptExample
           targetExample
@@ -165,6 +167,7 @@ describe("Card schema", () => {
     var query = `
       mutation UpdateCard($id: ID!, $input: UpdateCardInput!) {
         updateCard(id: $id, input: $input) {
+          prompt
           target
           promptExample
           targetExample
@@ -198,6 +201,7 @@ describe("Card schema", () => {
     var query = `
       mutation RemoveCard($id: ID!) {
         removeCard(id: $id) {
+          prompt
           target
           promptExample
           targetExample

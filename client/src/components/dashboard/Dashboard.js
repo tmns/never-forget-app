@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import ApolloClient, { gql } from "apollo-boost";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -10,6 +9,8 @@ import CustomTheme from "../layout/CustomTheme";
 import Navbar from "../layout/Navbar";
 import Table from "./Table";
 import Footer from "../layout/Footer";
+import client from "../../apollo/client";
+import { decksQuery } from "../../apollo/deck";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -26,28 +27,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  credentials: "include"
-});
-
-const decksQuery = gql`
-  {
-    decks {
-      name
-      description
-    }
-  }
-`;
-
-
 const Dashboard = ({ session, size }) => {
   const classes = useStyles();
   
   var [deckData, setDeckData] = React.useState(
     {
+      title: 'Decks',
       columns: [
-        { title: "Name", field: "name" }
+        { title: "Name", field: "name" },
+        { title: "Description", field: "description" }
       ],
       data: []
     }
@@ -89,7 +77,7 @@ const Dashboard = ({ session, size }) => {
         >
           Welcome back, {session.username}!
         </Typography>
-        <Table title="Decks" data={deckData} />
+        <Table data={deckData} />
       </Container>
       <Footer />
     </Fragment>

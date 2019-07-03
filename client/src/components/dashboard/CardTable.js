@@ -16,17 +16,7 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import OfflineBolt from '@material-ui/icons/OfflineBolt';
-
-import client from "../../apollo/client";
-import { 
-  addDeck,
-  updateDeck,
-  removeDeck,
-  getDeckId 
-} from "../../apollo/deck";
-import {
-  cardsQuery
-} from "../../apollo/card";
+import ApolloClient, { gql } from "apollo-boost";
 
 const tableIcons = {
   Add: AddBox,
@@ -48,6 +38,68 @@ const tableIcons = {
   ViewColumn: ViewColumn
 };
 
+const client = new ApolloClient({
+  uri: "http://localhost:4000/graphql",
+  credentials: "include"
+});
+
+const decksQuery = gql`
+  {
+    decks {
+      name
+      _id
+    }
+  }
+`;
+
+const addDeckMutation = gql`
+  mutation CreateNewDeck($input: NewDeckInput!) {
+    newDeck(input: $input) {
+      name
+      description
+    }
+  }
+`;
+
+const updateDeckMutation = gql`
+  mutation UpdateDeck($id: ID!, $input: UpdateDeckInput!) {
+    updateDeck(id: $id, input: $input) {
+      name
+      description
+    }
+  }
+`;
+
+const removeDeckMutation = gql`
+  mutation RemoveDeck($id: ID!) {
+    removeDeck(id: $id) {
+      name
+      description
+    }
+  }
+`;
+
+async function getDeckId(name) {
+  var data = await client.query({
+    query: decksQuery,
+    fetchPolicy: "no-cache"
+  });
+  var decks = data.data.decks;
+  return decks.filter(deck => deck.name == name)[0]._id
+}
+
+async function addDeck(variables) {
+  return await client.mutate({ mutation: addDeckMutation, variables});
+}
+
+async function updateDeck(variables) {
+  return await client.mutate({ mutation: updateDeckMutation, variables })
+}
+
+async function removeDeck(variables) {
+  return await client.mutate({ mutation: removeDeckMutation, variables})
+}
+
 function Table(props) {
   const [state, setState] = React.useState(props.data);
 
@@ -55,16 +107,35 @@ function Table(props) {
     setState(props.data);
   }, [props.data]);
 
-  const [isBrowsingCardsState, setIsBrowsingCardsState] = React.useState(false);
-
-  var isActionHidden = isBrowsingCardsState;
-
   return (
     <MaterialTable
       icons={tableIcons}
-      title={state.title}
+      title={props.title}
       columns={state.columns}
       data={state.data}
+      detailPanel={[
+        {
+          tooltip: "Show Examples",
+          render: rowData => {
+            return (
+              <div
+                style={{
+                  fontSize: 15,
+                  paddingTop: '15px',
+                  paddingBottom: '15px',
+                  paddingLeft: '15px',
+                  textAlign: 'left',
+                  color: 'black',
+                  backgroundColor: '#ffff',
+                }}
+              >
+                Prompt Example: {rowData.promptExample}
+                Target Example: {rowData.targetExample}
+              </div>
+            )
+          }
+        }
+      ]}
       editable={{
         onRowAdd: newData =>
           new Promise(resolve => {
@@ -120,8 +191,7 @@ function Table(props) {
               setState({ ...state, data });
 
               // remove deck fom database
-              var id = await getDeckId(oldData.name);
-              console.log(id)
+              var id = getDeckId(oldData.name);
               var variables = { id };
               try {
                 await removeDeck(variables)
@@ -135,35 +205,12 @@ function Table(props) {
         {
           icon: OfflineBolt,
           tooltip: 'Study',
-          hidden: isActionHidden,
           onClick: (event, rowData) => console.log(event, rowData)
         },
         {
           icon: Search,
           tooltip: 'Browse',
-          hidden: isActionHidden,
-          onClick: async (event, rowData) => {
-            var deckId = await getDeckId(rowData.name);
-            var variables = { deckId };
-            var data = await client.query({
-              query: cardsQuery,
-              variables, 
-              fetchPolicy: "no-cache"
-            });
-            var cards = data.data.cards;
-            var cardData = {
-              title: `Cards in ${rowData.name}`,
-              columns: [
-                { title: "Prompt", field: "prompt" },
-                { title: "Target", field: "target" },
-                { title: "Prompt Example", field: "promptExample"},
-                { title: "Target Example", field: "targetExample"}
-              ],
-              data: cards
-            }
-            setIsBrowsingCardsState(true);
-            setState(cardData);
-          }
+          onClick: (event, rowData) => console.log(event, rowData)
         }
       ]}  
       options={{

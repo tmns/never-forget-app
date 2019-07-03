@@ -1,9 +1,6 @@
-import ApolloClient, { gql } from "apollo-boost";
+import { gql } from "apollo-boost";
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  credentials: "include"
-});
+import client from "../apollo/client";
 
 const isLoginQuery = gql`
   {
