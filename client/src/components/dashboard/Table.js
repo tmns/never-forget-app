@@ -16,7 +16,11 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import OfflineBolt from '@material-ui/icons/OfflineBolt';
+import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from "@material-ui/core/styles";
 
+import CustomTheme from "../layout/CustomTheme";
 import client from "../../apollo/client";
 import { 
   addDeck,
@@ -48,7 +52,20 @@ const tableIcons = {
   ViewColumn: ViewColumn
 };
 
+const useStyles = makeStyles(theme => ({
+  button: {
+    color: CustomTheme.palette.secondary.main,
+    fontSize: '17px'
+  },
+  input: {
+    display: 'none',
+  },
+}));
+
 function Table(props) {
+
+  const classes = useStyles();
+
   const [state, setState] = React.useState(props.data);
 
   React.useEffect(() => {
@@ -60,116 +77,130 @@ function Table(props) {
   var isActionHidden = isBrowsingCardsState;
 
   return (
-    <MaterialTable
-      icons={tableIcons}
-      title={state.title}
-      columns={state.columns}
-      data={state.data}
-      editable={{
-        onRowAdd: newData =>
-          new Promise(resolve => {
-            setTimeout(async () => {
-              resolve();
-              const data = [...state.data];
-              data.push(newData);
-              setState({ ...state, data });
-
-              // add deck to database
-              try {
-                await addDeck({ 
-                  input: {
-                    name: newData.name, 
-                    description: newData.description
-                  }
-                })
-              }  catch(e) {
-                console.log(e)
-              }
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise(resolve => {
-            setTimeout(async () => {
-              resolve();
-              const data = [...state.data];
-              data[data.indexOf(oldData)] = newData;
-              setState({ ...state, data });
-
-              // update deck in database
-              var id = await getDeckId(oldData.name);
-              var variables = { 
-                input: {
-                  name: newData.name,
-                  description: newData.description
-                },
-                id
-              }
-              try {
-                return await updateDeck(variables);
-              } catch(e) {
-                console.log(e);
-              }
-            }, 600);
-          }),
-        onRowDelete: oldData =>
-          new Promise(resolve => {
-            setTimeout(async () => {
-              resolve();
-              const data = [...state.data];
-              data.splice(data.indexOf(oldData), 1);
-              setState({ ...state, data });
-
-              // remove deck fom database
-              var id = await getDeckId(oldData.name);
-              console.log(id)
-              var variables = { id };
-              try {
-                await removeDeck(variables)
-              } catch(e) {
-                console.log(e);
-              }
-            }, 600);
-          })
-      }}
-      actions={[
-        {
-          icon: OfflineBolt,
-          tooltip: 'Study',
-          hidden: isActionHidden,
-          onClick: (event, rowData) => console.log(event, rowData)
-        },
-        {
-          icon: Search,
-          tooltip: 'Browse',
-          hidden: isActionHidden,
-          onClick: async (event, rowData) => {
-            var deckId = await getDeckId(rowData.name);
-            var variables = { deckId };
-            var data = await client.query({
-              query: cardsQuery,
-              variables, 
-              fetchPolicy: "no-cache"
-            });
-            var cards = data.data.cards;
-            var cardData = {
-              title: `Cards in ${rowData.name}`,
-              columns: [
-                { title: "Prompt", field: "prompt" },
-                { title: "Target", field: "target" },
-                { title: "Prompt Example", field: "promptExample"},
-                { title: "Target Example", field: "targetExample"}
-              ],
-              data: cards
-            }
-            setIsBrowsingCardsState(true);
-            setState(cardData);
-          }
+    <React.Fragment>
+      {
+        isBrowsingCardsState == true &&
+        <div onClick={() => {
+          setIsBrowsingCardsState(false);
+          setState(props.data);
         }
-      ]}  
-      options={{
-        actionsColumnIndex: -1
-      }}
-    />
+      }>
+        <IconButton className={classes.button}>
+          <ArrowBackOutlinedIcon /> Return to decks
+        </IconButton>
+      </div>
+      }
+      <MaterialTable
+        icons={tableIcons}
+        title={state.title}
+        columns={state.columns}
+        data={state.data}
+        editable={{
+          onRowAdd: newData =>
+            new Promise(resolve => {
+              setTimeout(async () => {
+                resolve();
+                const data = [...state.data];
+                data.push(newData);
+                setState({ ...state, data });
+
+                // add deck to database
+                try {
+                  await addDeck({ 
+                    input: {
+                      name: newData.name, 
+                      description: newData.description
+                    }
+                  })
+                }  catch(e) {
+                  console.log(e)
+                }
+              }, 600);
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise(resolve => {
+              setTimeout(async () => {
+                resolve();
+                const data = [...state.data];
+                data[data.indexOf(oldData)] = newData;
+                setState({ ...state, data });
+
+                // update deck in database
+                var id = await getDeckId(oldData.name);
+                var variables = { 
+                  input: {
+                    name: newData.name,
+                    description: newData.description
+                  },
+                  id
+                }
+                try {
+                  return await updateDeck(variables);
+                } catch(e) {
+                  console.log(e);
+                }
+              }, 600);
+            }),
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              setTimeout(async () => {
+                resolve();
+                const data = [...state.data];
+                data.splice(data.indexOf(oldData), 1);
+                setState({ ...state, data });
+
+                // remove deck fom database
+                var id = await getDeckId(oldData.name);
+                console.log(id)
+                var variables = { id };
+                try {
+                  await removeDeck(variables)
+                } catch(e) {
+                  console.log(e);
+                }
+              }, 600);
+            })
+        }}
+        actions={[
+          {
+            icon: OfflineBolt,
+            tooltip: 'Study',
+            hidden: isActionHidden,
+            onClick: (event, rowData) => console.log(event, rowData)
+          },
+          {
+            icon: Search,
+            tooltip: 'Browse',
+            hidden: isActionHidden,
+            onClick: async (event, rowData) => {
+              var deckId = await getDeckId(rowData.name);
+              var variables = { deckId };
+              var data = await client.query({
+                query: cardsQuery,
+                variables, 
+                fetchPolicy: "no-cache"
+              });
+              var cards = data.data.cards;
+              var cardData = {
+                title: `Cards in ${rowData.name}`,
+                columns: [
+                  { title: "Prompt", field: "prompt" },
+                  { title: "Target", field: "target" },
+                  { title: "Prompt Example", field: "promptExample"},
+                  { title: "Target Example", field: "targetExample"}
+                ],
+                data: cards
+              }
+              setIsBrowsingCardsState(true);
+              setState(cardData);
+            }
+          }
+        ]}  
+        options={{
+          actionsColumnIndex: -1
+        }}
+      />
+    </React.Fragment>
   );
 }
 
