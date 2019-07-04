@@ -55,7 +55,11 @@ const tableIcons = {
 const useStyles = makeStyles(theme => ({
   button: {
     color: CustomTheme.palette.secondary.main,
-    fontSize: '17px'
+    fontSize: '17px',
+    "&:hover": {
+      color: CustomTheme.palette.secondary.dark,
+      backgroundColor: CustomTheme.palette.primary.main
+    }
   },
   input: {
     display: 'none',
