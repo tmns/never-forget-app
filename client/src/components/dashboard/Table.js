@@ -15,21 +15,18 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import OfflineBolt from '@material-ui/icons/OfflineBolt';
+import OfflineBolt from "@material-ui/icons/OfflineBolt";
 import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CustomTheme from "../layout/CustomTheme";
 import client from "../../apollo/client";
+import { addDeck, updateDeck, removeDeck, getDeckId } from "../../apollo/deck";
 import { 
-  addDeck,
-  updateDeck,
-  removeDeck,
-  getDeckId 
-} from "../../apollo/deck";
-import {
-  cardsQuery
+  getCardId, 
+  cardsQuery,
+  updateCard
 } from "../../apollo/card";
 
 const tableIcons = {
@@ -55,45 +52,80 @@ const tableIcons = {
 const useStyles = makeStyles(theme => ({
   button: {
     color: CustomTheme.palette.secondary.main,
-    fontSize: '17px',
+    fontSize: "17px",
     "&:hover": {
       color: CustomTheme.palette.secondary.dark,
       backgroundColor: CustomTheme.palette.primary.main
     }
   },
   input: {
-    display: 'none',
-  },
+    display: "none"
+  }
 }));
 
+// helper func to update deck in database
+async function updateDeckInDB(oldData, newData) {
+  var id = await getDeckId(oldData.name);
+  var variables = {
+    input: {
+      name: newData.name,
+      description: newData.description
+    },
+    id
+  };
+  try {
+    return await updateDeck(variables);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function updateCardInDB(oldData, newData, deckId) {
+  var id = await getCardId(oldData.prompt, deckId);
+  var variables = {
+    input: {
+      prompt: newData.prompt,
+      target: newData.target,
+      promptExample: newData.promptExample,
+      targetExample: newData.targetExample
+    },
+    id
+  };
+  console.log(variables)
+  try {
+    return await updateCard(variables);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function Table(props) {
-
   const classes = useStyles();
-
+  
   const [state, setState] = React.useState(props.data);
 
   React.useEffect(() => {
     setState(props.data);
   }, [props.data]);
-
+  
   const [isBrowsingCardsState, setIsBrowsingCardsState] = React.useState(false);
 
   var isActionHidden = isBrowsingCardsState;
 
   return (
     <React.Fragment>
-      {
-        isBrowsingCardsState == true &&
-        <div onClick={() => {
-          setIsBrowsingCardsState(false);
-          setState(props.data);
-        }
-      }>
-        <IconButton className={classes.button}>
-          <ArrowBackOutlinedIcon /> Return to decks
-        </IconButton>
-      </div>
-      }
+      {isBrowsingCardsState == true && (
+        <div
+          onClick={() => {
+            setIsBrowsingCardsState(false);
+            setState(props.data);
+          }}
+        >
+          <IconButton className={classes.button}>
+            <ArrowBackOutlinedIcon /> Return to decks
+          </IconButton>
+        </div>
+      )}
       <MaterialTable
         icons={tableIcons}
         title={state.title}
@@ -110,14 +142,14 @@ function Table(props) {
 
                 // add deck to database
                 try {
-                  await addDeck({ 
+                  await addDeck({
                     input: {
-                      name: newData.name, 
+                      name: newData.name,
                       description: newData.description
                     }
-                  })
-                }  catch(e) {
-                  console.log(e)
+                  });
+                } catch (e) {
+                  console.log(e);
                 }
               }, 600);
             }),
@@ -129,19 +161,10 @@ function Table(props) {
                 data[data.indexOf(oldData)] = newData;
                 setState({ ...state, data });
 
-                // update deck in database
-                var id = await getDeckId(oldData.name);
-                var variables = { 
-                  input: {
-                    name: newData.name,
-                    description: newData.description
-                  },
-                  id
-                }
-                try {
-                  return await updateDeck(variables);
-                } catch(e) {
-                  console.log(e);
+                if (!isBrowsingCardsState) {
+                  await updateDeckInDB(oldData, newData);
+                } else {
+                  await updateCardInDB(oldData, newData);
                 }
               }, 600);
             }),
@@ -155,11 +178,10 @@ function Table(props) {
 
                 // remove deck fom database
                 var id = await getDeckId(oldData.name);
-                console.log(id)
                 var variables = { id };
                 try {
-                  await removeDeck(variables)
-                } catch(e) {
+                  await removeDeck(variables);
+                } catch (e) {
                   console.log(e);
                 }
               }, 600);
@@ -168,20 +190,20 @@ function Table(props) {
         actions={[
           {
             icon: OfflineBolt,
-            tooltip: 'Study',
+            tooltip: "Study",
             hidden: isActionHidden,
             onClick: (event, rowData) => console.log(event, rowData)
           },
           {
             icon: Search,
-            tooltip: 'Browse',
+            tooltip: "Browse",
             hidden: isActionHidden,
             onClick: async (event, rowData) => {
               var deckId = await getDeckId(rowData.name);
               var variables = { deckId };
               var data = await client.query({
                 query: cardsQuery,
-                variables, 
+                variables,
                 fetchPolicy: "no-cache"
               });
               var cards = data.data.cards;
@@ -190,16 +212,16 @@ function Table(props) {
                 columns: [
                   { title: "Prompt", field: "prompt" },
                   { title: "Target", field: "target" },
-                  { title: "Prompt Example", field: "promptExample"},
-                  { title: "Target Example", field: "targetExample"}
+                  { title: "Prompt Example", field: "promptExample" },
+                  { title: "Target Example", field: "targetExample" }
                 ],
                 data: cards
-              }
+              };
               setIsBrowsingCardsState(true);
               setState(cardData);
             }
           }
-        ]}  
+        ]}
         options={{
           actionsColumnIndex: -1
         }}

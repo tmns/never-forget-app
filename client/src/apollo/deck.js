@@ -11,12 +11,12 @@ const decksQuery = gql`
 `;
 
 const deckIdsQuery = gql`
-{
-  decks {
-    name
-    _id
+  {
+    decks {
+      name
+      _id
+    }
   }
-}
 `;
 
 const addDeckMutation = gql`
@@ -47,15 +47,15 @@ const removeDeckMutation = gql`
 `;
 
 async function addDeck(variables) {
-  return await client.mutate({ mutation: addDeckMutation, variables});
+  return await client.mutate({ mutation: addDeckMutation, variables });
 }
 
 async function updateDeck(variables) {
-  return await client.mutate({ mutation: updateDeckMutation, variables })
+  return await client.mutate({ mutation: updateDeckMutation, variables });
 }
 
 async function removeDeck(variables) {
-  return await client.mutate({ mutation: removeDeckMutation, variables})
+  return await client.mutate({ mutation: removeDeckMutation, variables });
 }
 
 async function getDeckId(name) {
@@ -64,13 +64,7 @@ async function getDeckId(name) {
     fetchPolicy: "no-cache"
   });
   var decks = data.data.decks;
-  return decks.filter(deck => deck.name == name)[0]._id
+  return decks.filter(deck => deck.name == name)[0]._id;
 }
 
-export {
-  decksQuery,
-  addDeck,
-  updateDeck,
-  removeDeck,
-  getDeckId
-};
+export { decksQuery, addDeck, updateDeck, removeDeck, getDeckId };
