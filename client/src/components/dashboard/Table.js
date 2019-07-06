@@ -23,7 +23,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import CustomTheme from "../layout/CustomTheme";
 import client from "../../apollo/client";
-import Study from '../study/Study';
 
 import { 
   addDeck, 
@@ -67,17 +66,27 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       color: CustomTheme.palette.secondary.dark,
       backgroundColor: CustomTheme.palette.primary.main
-    }
+    },
+    fontWeight: '300'
   },
   input: {
     display: "none"
+  },
+  error: {
+    color: CustomTheme.palette.secondary.main,
+    fontSize: "17px",
+    fontWeight: '300',
+    marginBottom: theme.spacing(2)
   }
 }));
 
 function Table(props) {
+  console.log(props)
   const classes = useStyles();
   
   const [state, setState] = React.useState(props.data);
+
+  const [errors, setErrors] = React.useState({ emptyDeck: null});
 
   React.useEffect(() => {
     setState(props.data);
@@ -99,6 +108,11 @@ function Table(props) {
           <IconButton className={classes.button}>
             <ArrowBackOutlinedIcon /> Return to decks
           </IconButton>
+        </div>
+      )}
+      {errors.emptyDeck && (
+        <div className={classes.error}>
+          {errors.emptyDeck}
         </div>
       )}
       <MaterialTable
@@ -189,9 +203,19 @@ function Table(props) {
             icon: OfflineBolt,
             tooltip: "Study",
             hidden: isActionHidden,
-            onClick: (event, rowData) => {
-              console.log(event, rowData)
-              // figure out how to show study component with deck id passed 
+            onClick: async (event, rowData) => {
+              var deckId = await getDeckId(rowData.name);
+              var data = await client.query({
+                query: cardsQuery,
+                variables: { deckId },
+                fetchPolicy: "no-cache"
+              });
+              var cards = data.data.cards;
+              if (cards.length == 0) {
+                setErrors({ emptyDeck: 'Sorry, this deck has no cards to study. Please choose a different one.' })
+              } else {
+                props.setStudyState({isStudying: true, deckId, cards});
+              }
             }
           },
           {

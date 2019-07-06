@@ -11,6 +11,7 @@ import Table from "./Table";
 import Footer from "../layout/Footer";
 import client from "../../apollo/client";
 import { decksQuery } from "../../apollo/deck";
+import Study from "../study/Study";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -41,6 +42,12 @@ const Dashboard = ({ session, size }) => {
     }
   );
 
+  var [studyState, setStudyState] = React.useState({
+    isStudying: false,
+    deckId: null,
+    cards: null
+  });
+
   React.useEffect(() => {
     async function getDeckData() {
       // fetch decks
@@ -62,26 +69,32 @@ const Dashboard = ({ session, size }) => {
     getDeckData();
   }, [])
 
-  return (
-    <Fragment>
-      <Navbar />
-      <CssBaseline />
-      <Container component="main" maxWidth="sm">
-        <Typography
-          component="h1"
-          variant="h5"
-          color="inherit"
-          noWrap
-          className={classes.header}
-          align="center"
-        >
-          Welcome back, {session.username}!
-        </Typography>
-        <Table data={deckData} />
-      </Container>
-      <Footer />
-    </Fragment>
-  );
+  if (studyState.isStudying == false) {
+    return (
+      <Fragment>
+        <Navbar />
+        <CssBaseline />
+        <Container component="main" maxWidth="sm">
+          <Typography
+            component="h1"
+            variant="h5"
+            color="inherit"
+            noWrap
+            className={classes.header}
+            align="center"
+          >
+            Welcome back, {session.username}!
+          </Typography>
+          <Table data={deckData} setStudyState={setStudyState}/>
+        </Container>
+        <Footer />
+      </Fragment>  
+    );
+  } else {
+    return (
+      <Study cards={studyState.cards} setStudyState={setStudyState}/>
+    )
+  }
 };
 
 const mapStateToProps = ({ session }) => ({
