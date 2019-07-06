@@ -21,6 +21,17 @@ const cardIdsQuery = gql`
   }
 `;
 
+const addCardMutation = gql`
+  mutation CreateNewCard($input: NewCardInput!) {
+    newCard(input: $input) {
+      prompt
+      target
+      promptExample
+      targetExample
+    }
+  }
+`;
+
 const updateCardMutation = gql`
   mutation UpdateCard($id: ID!, $input: UpdateCardInput!) {
     updateCard(id: $id, input: $input) {
@@ -31,6 +42,10 @@ const updateCardMutation = gql`
     }
   }
 `;
+
+async function addCard(variables) {
+  return await client.mutate({ mutation: addCardMutation, variables });
+}
 
 async function updateCard(variables) {
   return await client.mutate({ mutation: updateCardMutation, variables });
@@ -68,6 +83,7 @@ async function updateCardInDB(oldData, newData, deckId) {
 export {
   cardsQuery,
   getCardId,
+  addCard,
   updateCard,
   updateCardInDB
 }

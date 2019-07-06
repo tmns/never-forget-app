@@ -1,4 +1,5 @@
 import React from "react";
+import ms from 'ms';
 import MaterialTable from "material-table";
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -22,14 +23,17 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import CustomTheme from "../layout/CustomTheme";
 import client from "../../apollo/client";
+
 import { 
   addDeck, 
   removeDeck, 
   getDeckId,
   updateDeckInDB
 } from "../../apollo/deck";
+
 import { 
   cardsQuery,
+  addCard,
   updateCardInDB,
 } from "../../apollo/card";
 
@@ -110,12 +114,28 @@ function Table(props) {
 
                 // add deck to database
                 try {
-                  await addDeck({
-                    input: {
-                      name: newData.name,
-                      description: newData.description
-                    }
-                  });
+                  if (!isBrowsingCardsState) {
+                    await addDeck({
+                      input: {
+                        name: newData.name,
+                        description: newData.description
+                      }
+                    });  
+                  } else {
+                    let now = Math.floor(new Date().getTime() / ms('1h'));
+                    await addCard({
+                      input: {
+                        prompt: newData.prompt,
+                        target: newData.target,
+                        promptExample: newData.promptExample,
+                        targetExample: newData.targetExample,
+                        timeAdded: now,
+                        nextReview: now,
+                        intervalProgress: 0,
+                        deckId: state.deckId
+                      }
+                    })
+                  }
                 } catch (e) {
                   console.log(e);
                 }
