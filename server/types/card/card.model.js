@@ -103,9 +103,9 @@ cardSchema.statics.createCard = async function(props, createdBy) {
 };
 
 cardSchema.statics.findAndUpdateCard = async function(_id, props, createdBy) {
-  var foundDeck = await Deck.findOne({ _id: props.deckId, createdBy });
-  if (!foundDeck) {
-    throw new UserInputError(`No deck with id ${props.deckId} found`);
+  var foundCard = await this.findOne({ _id, createdBy }).lean();
+  if (!foundCard) {
+    throw new UserInputError(`No card with id ${_id} found`);
   }
 
   var tProps = trimProps(props);

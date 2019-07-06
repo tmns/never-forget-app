@@ -89,9 +89,8 @@ async function updateCardInDB(oldData, newData, deckId) {
       promptExample: newData.promptExample,
       targetExample: newData.targetExample
     },
-    id
+    id,
   };
-  console.log(variables)
   try {
     return await updateCard(variables);
   } catch (e) {
@@ -156,6 +155,7 @@ function Table(props) {
           onRowUpdate: (newData, oldData) =>
             new Promise(resolve => {
               setTimeout(async () => {
+
                 resolve();
                 const data = [...state.data];
                 data[data.indexOf(oldData)] = newData;
@@ -164,7 +164,7 @@ function Table(props) {
                 if (!isBrowsingCardsState) {
                   await updateDeckInDB(oldData, newData);
                 } else {
-                  await updateCardInDB(oldData, newData);
+                  await updateCardInDB(oldData, newData, state.deckId);
                 }
               }, 600);
             }),
@@ -215,7 +215,8 @@ function Table(props) {
                   { title: "Prompt Example", field: "promptExample" },
                   { title: "Target Example", field: "targetExample" }
                 ],
-                data: cards
+                data: cards,
+                deckId
               };
               setIsBrowsingCardsState(true);
               setState(cardData);

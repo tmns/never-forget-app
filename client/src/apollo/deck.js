@@ -67,4 +67,10 @@ async function getDeckId(name) {
   return decks.filter(deck => deck.name == name)[0]._id;
 }
 
-export { decksQuery, addDeck, updateDeck, removeDeck, getDeckId };
+export { 
+  decksQuery, 
+  addDeck, 
+  updateDeck, 
+  removeDeck, 
+  getDeckId 
+};
