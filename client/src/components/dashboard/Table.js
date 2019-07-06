@@ -22,11 +22,15 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import CustomTheme from "../layout/CustomTheme";
 import client from "../../apollo/client";
-import { addDeck, updateDeck, removeDeck, getDeckId } from "../../apollo/deck";
 import { 
-  getCardId, 
+  addDeck, 
+  removeDeck, 
+  getDeckId,
+  updateDeckInDB
+} from "../../apollo/deck";
+import { 
   cardsQuery,
-  updateCard
+  updateCardInDB,
 } from "../../apollo/card";
 
 const tableIcons = {
@@ -62,41 +66,6 @@ const useStyles = makeStyles(theme => ({
     display: "none"
   }
 }));
-
-// helper func to update deck in database
-async function updateDeckInDB(oldData, newData) {
-  var id = await getDeckId(oldData.name);
-  var variables = {
-    input: {
-      name: newData.name,
-      description: newData.description
-    },
-    id
-  };
-  try {
-    return await updateDeck(variables);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-async function updateCardInDB(oldData, newData, deckId) {
-  var id = await getCardId(oldData.prompt, deckId);
-  var variables = {
-    input: {
-      prompt: newData.prompt,
-      target: newData.target,
-      promptExample: newData.promptExample,
-      targetExample: newData.targetExample
-    },
-    id,
-  };
-  try {
-    return await updateCard(variables);
-  } catch (e) {
-    console.log(e);
-  }
-}
 
 function Table(props) {
   const classes = useStyles();

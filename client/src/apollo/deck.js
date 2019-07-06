@@ -67,10 +67,28 @@ async function getDeckId(name) {
   return decks.filter(deck => deck.name == name)[0]._id;
 }
 
+// helper func to update deck in database
+async function updateDeckInDB(oldData, newData) {
+  var id = await getDeckId(oldData.name);
+  var variables = {
+    input: {
+      name: newData.name,
+      description: newData.description
+    },
+    id
+  };
+  try {
+    return await updateDeck(variables);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export { 
   decksQuery, 
   addDeck, 
   updateDeck, 
   removeDeck, 
-  getDeckId 
+  getDeckId,
+  updateDeckInDB
 };

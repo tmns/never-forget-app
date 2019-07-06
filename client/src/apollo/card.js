@@ -46,8 +46,28 @@ async function getCardId(prompt, deckId) {
   return cards.filter(card => card.prompt == prompt)[0]._id;
 }
 
+// helper func to update card in database
+async function updateCardInDB(oldData, newData, deckId) {
+  var id = await getCardId(oldData.prompt, deckId);
+  var variables = {
+    input: {
+      prompt: newData.prompt,
+      target: newData.target,
+      promptExample: newData.promptExample,
+      targetExample: newData.targetExample
+    },
+    id,
+  };
+  try {
+    return await updateCard(variables);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export {
   cardsQuery,
   getCardId,
-  updateCard
+  updateCard,
+  updateCardInDB
 }
