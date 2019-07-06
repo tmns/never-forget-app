@@ -79,6 +79,9 @@ function StudyCard(props) {
   function handleNoClick() {
     setExpanded(false);
     // do logic for NOT remembering
+    if (!props.demo) {
+      props.setNumCards(props.numCards - 1)
+    }
 
     // we delay here so the answer isnt revealed as the expansion closes
     setTimeout(() => {
@@ -104,6 +107,9 @@ function StudyCard(props) {
 
   function handleYesClick() {
     setExpanded(false);
+    if (!props.demo) {
+      props.setNumCards(props.numCards - 1)
+    }
     // do logic for remembering
 
     setTimeout(() => {

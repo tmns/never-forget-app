@@ -80,7 +80,7 @@ function Landing() {
               A <Link className={classes.link} href="https://www.youtube.com/watch?v=osK0Agqu7dc" target="_blank">Spaced Repetition Learning</Link> App<br/>
               Play around with the example cards below or sign up to create your own!
             </Typography>
-            <StudyCard cards={exampleCards}/>
+            <StudyCard cards={exampleCards} demo={true}/>
           </div>
         </Container>
         <Footer />

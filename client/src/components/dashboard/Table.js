@@ -73,7 +73,7 @@ const useStyles = makeStyles(theme => ({
     display: "none"
   },
   error: {
-    color: CustomTheme.palette.secondary.main,
+    color: CustomTheme.palette.primary.contrastText,
     fontSize: "17px",
     fontWeight: '300',
     marginBottom: theme.spacing(2)

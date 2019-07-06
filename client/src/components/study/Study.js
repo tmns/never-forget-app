@@ -80,7 +80,7 @@ const Study = ({ session, size, cards, setStudyState }) => {
           <Typography component="h4" className={classes.para} align="center">
             You have {NumCardsStyled} cards to study for this deck.
           </Typography>
-          <StudyCard cards={cards} />
+          <StudyCard cards={cards} numCards={numCards} setNumCards={setNumCards}/>
           <div
             onClick={() => {
               setStudyState({ isStudying: false });
