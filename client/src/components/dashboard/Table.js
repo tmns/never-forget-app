@@ -1,5 +1,5 @@
 import React from "react";
-import ms from 'ms';
+import ms from "ms";
 import MaterialTable from "material-table";
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -24,14 +24,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import CustomTheme from "../layout/CustomTheme";
 import client from "../../apollo/client";
 
-import { 
-  addDeck, 
-  removeDeck, 
+import {
+  addDeck,
+  removeDeck,
   getDeckId,
   updateDeckInDB
 } from "../../apollo/deck";
 
-import { 
+import {
   cardsQuery,
   addCard,
   updateCardInDB,
@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
       color: CustomTheme.palette.secondary.dark,
       backgroundColor: CustomTheme.palette.primary.main
     },
-    fontWeight: '300'
+    fontWeight: "300",
   },
   input: {
     display: "none"
@@ -75,45 +75,30 @@ const useStyles = makeStyles(theme => ({
   error: {
     color: CustomTheme.palette.primary.contrastText,
     fontSize: "17px",
-    fontWeight: '300',
+    fontWeight: "300",
     marginBottom: theme.spacing(2)
   }
 }));
 
 function Table(props) {
-  console.log(props)
   const classes = useStyles();
-  
+
   const [state, setState] = React.useState(props.data);
 
-  const [errors, setErrors] = React.useState({ emptyDeck: null});
+  const [errors, setErrors] = React.useState({ emptyDeck: null });
 
   React.useEffect(() => {
     setState(props.data);
   }, [props.data]);
-  
+
   const [isBrowsingCardsState, setIsBrowsingCardsState] = React.useState(false);
 
   var isActionHidden = isBrowsingCardsState;
 
   return (
     <React.Fragment>
-      {isBrowsingCardsState == true && (
-        <div
-          onClick={() => {
-            setIsBrowsingCardsState(false);
-            setState(props.data);
-          }}
-        >
-          <IconButton className={classes.button}>
-            <ArrowBackOutlinedIcon /> Return to decks
-          </IconButton>
-        </div>
-      )}
       {errors.emptyDeck && (
-        <div className={classes.error}>
-          {errors.emptyDeck}
-        </div>
+        <div className={classes.error}>{errors.emptyDeck}</div>
       )}
       <MaterialTable
         icons={tableIcons}
@@ -135,23 +120,23 @@ function Table(props) {
                     await addDeck({
                       input: {
                         name: newData.name,
-                        description: newData.description || ''
+                        description: newData.description || ""
                       }
-                    });  
+                    });
                   } else {
-                    let now = Math.floor(new Date().getTime() / ms('1h'));
+                    let now = Math.floor(new Date().getTime() / ms("1h"));
                     await addCard({
                       input: {
                         prompt: newData.prompt,
                         target: newData.target,
-                        promptExample: newData.promptExample || '',
-                        targetExample: newData.targetExample || '',
+                        promptExample: newData.promptExample || "",
+                        targetExample: newData.targetExample || "",
                         timeAdded: now,
                         nextReview: now,
                         intervalProgress: 0,
                         deckId: state.deckId
                       }
-                    })
+                    });
                   }
                 } catch (e) {
                   console.log(e);
@@ -161,7 +146,6 @@ function Table(props) {
           onRowUpdate: (newData, oldData) =>
             new Promise(resolve => {
               setTimeout(async () => {
-
                 resolve();
                 const data = [...state.data];
                 data[data.indexOf(oldData)] = newData;
@@ -186,7 +170,7 @@ function Table(props) {
                   if (!isBrowsingCardsState) {
                     var id = await getDeckId(oldData.name);
                     var variables = { id };
-                    await removeDeck(variables);  
+                    await removeDeck(variables);
                   } else {
                     var id = await getCardId(oldData.prompt, state.deckId);
                     var variables = { id };
@@ -204,6 +188,7 @@ function Table(props) {
             tooltip: "Study",
             hidden: isActionHidden,
             onClick: async (event, rowData) => {
+              setErrors({ emptyDeck: null });
               var deckId = await getDeckId(rowData.name);
               var data = await client.query({
                 query: cardsQuery,
@@ -212,9 +197,12 @@ function Table(props) {
               });
               var cards = data.data.cards;
               if (cards.length == 0) {
-                setErrors({ emptyDeck: 'Sorry, this deck has no cards to study. Please choose a different one.' })
+                setErrors({
+                  emptyDeck:
+                    "Sorry, this deck has no cards to study. Please choose a different one."
+                });
               } else {
-                props.setStudyState({isStudying: true, deckId, cards});
+                props.setStudyState({ isStudying: true, deckId, cards });
               }
             }
           },
@@ -223,6 +211,7 @@ function Table(props) {
             tooltip: "Browse",
             hidden: isActionHidden,
             onClick: async (event, rowData) => {
+              setErrors({emptyDeck: null});
               var deckId = await getDeckId(rowData.name);
               var variables = { deckId };
               var data = await client.query({
@@ -251,6 +240,19 @@ function Table(props) {
           actionsColumnIndex: -1
         }}
       />
+      {isBrowsingCardsState == true && (
+        <div
+          onClick={() => {
+            setIsBrowsingCardsState(false);
+            setState(props.data);
+          }}
+          align="center"
+        >
+          <IconButton className={classes.button}>
+            <ArrowBackOutlinedIcon /> Return to decks
+          </IconButton>
+        </div>
+      )}
     </React.Fragment>
   );
 }
