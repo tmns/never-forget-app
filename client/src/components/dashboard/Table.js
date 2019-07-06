@@ -35,6 +35,8 @@ import {
   cardsQuery,
   addCard,
   updateCardInDB,
+  getCardId,
+  removeCard
 } from "../../apollo/card";
 
 const tableIcons = {
@@ -118,7 +120,7 @@ function Table(props) {
                     await addDeck({
                       input: {
                         name: newData.name,
-                        description: newData.description
+                        description: newData.description || ''
                       }
                     });  
                   } else {
@@ -127,8 +129,8 @@ function Table(props) {
                       input: {
                         prompt: newData.prompt,
                         target: newData.target,
-                        promptExample: newData.promptExample,
-                        targetExample: newData.targetExample,
+                        promptExample: newData.promptExample || '',
+                        targetExample: newData.targetExample || '',
                         timeAdded: now,
                         nextReview: now,
                         intervalProgress: 0,
@@ -165,11 +167,16 @@ function Table(props) {
                 data.splice(data.indexOf(oldData), 1);
                 setState({ ...state, data });
 
-                // remove deck fom database
-                var id = await getDeckId(oldData.name);
-                var variables = { id };
                 try {
-                  await removeDeck(variables);
+                  if (!isBrowsingCardsState) {
+                    var id = await getDeckId(oldData.name);
+                    var variables = { id };
+                    await removeDeck(variables);  
+                  } else {
+                    var id = await getCardId(oldData.prompt, state.deckId);
+                    var variables = { id };
+                    await removeCard(variables);
+                  }
                 } catch (e) {
                   console.log(e);
                 }

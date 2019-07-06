@@ -43,12 +43,24 @@ const updateCardMutation = gql`
   }
 `;
 
+const removeCardMutation = gql`
+  mutation RemoveCard($id: ID!) {
+    removeCard(id: $id) {
+      _id
+    }
+  }
+`;
+
 async function addCard(variables) {
   return await client.mutate({ mutation: addCardMutation, variables });
 }
 
 async function updateCard(variables) {
   return await client.mutate({ mutation: updateCardMutation, variables });
+}
+
+async function removeCard(variables) {
+  return await client.mutate({ mutation: removeCardMutation, variables });
 }
 
 async function getCardId(prompt, deckId) {
@@ -85,5 +97,6 @@ export {
   getCardId,
   addCard,
   updateCard,
-  updateCardInDB
+  updateCardInDB,
+  removeCard
 }

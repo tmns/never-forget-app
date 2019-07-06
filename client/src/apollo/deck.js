@@ -40,8 +40,7 @@ const updateDeckMutation = gql`
 const removeDeckMutation = gql`
   mutation RemoveDeck($id: ID!) {
     removeDeck(id: $id) {
-      name
-      description
+      _id
     }
   }
 `;
