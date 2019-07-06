@@ -23,6 +23,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import CustomTheme from "../layout/CustomTheme";
 import client from "../../apollo/client";
+import Study from '../study/Study';
 
 import { 
   addDeck, 
@@ -188,7 +189,10 @@ function Table(props) {
             icon: OfflineBolt,
             tooltip: "Study",
             hidden: isActionHidden,
-            onClick: (event, rowData) => console.log(event, rowData)
+            onClick: (event, rowData) => {
+              console.log(event, rowData)
+              // figure out how to show study component with deck id passed 
+            }
           },
           {
             icon: Search,

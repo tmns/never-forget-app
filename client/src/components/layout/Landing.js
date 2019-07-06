@@ -8,7 +8,7 @@ import Link from "@material-ui/core/Link";
 
 import CustomTheme from "./CustomTheme";
 import Navbar from "./Navbar";
-import ReviewCard from '../flashcards/ReviewCard'
+import StudyCard from '../study/StudyCard'
 import Footer from './Footer';
 
 const useStyles = makeStyles(theme => ({
@@ -80,7 +80,7 @@ function Landing() {
               A <Link className={classes.link} href="https://www.youtube.com/watch?v=osK0Agqu7dc" target="_blank">Spaced Repetition Learning</Link> App<br/>
               Play around with the example cards below or sign up to create your own!
             </Typography>
-            <ReviewCard cards={exampleCards}/>
+            <StudyCard cards={exampleCards}/>
           </div>
         </Container>
         <Footer />

@@ -62,7 +62,7 @@ const StyledActions = withStyles({
   }
 })(CardActions);
 
-function ReviewCard(props) {
+function StudyCard(props) {
   const classes = useStyles();
 
   const [expanded, setExpanded] = React.useState(false);
@@ -190,4 +190,4 @@ function ReviewCard(props) {
   );
 }
 
-export default ReviewCard;
+export default StudyCard;
