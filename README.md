@@ -1,5 +1,61 @@
 # Never Forget
 
-Never Forget is a spaced repetition learning app designed to be as simple as possible to use! It will feature a flash-card based learning interface, as this is a rather familiar method of learning for folks. So far, a [CLI version](https://github.com/tmns/never-forget-cli) and the [backend server](https://github.com/tmns/never-forget-server) have been fully implemented - so feel free to play around with both while I work on tying everything together here.
+![](./screens/landing.png)
 
-For now, this repo can be considered under heavy construction!
+Never Forget is a spaced repetition learning app designed to be as simple as possible to use! It features a card based learning interface, as this is a rather familiar method of learning for folks. So far, a [CLI version](https://github.com/tmns/never-forget-cli) and the [backend server](https://github.com/tmns/never-forget-server) have been fully implemented - so feel free to play around with both while things are tied together here.
+
+So far, most of the main functionality has been implemented. You can:
+
+* Create an account (ie, a user)
+* Create a deck
+* Create a card
+* Browse decks
+* Browse cards
+* Edit a deck
+* Edit a card
+* Delete a deck
+* Delete a card
+* Study cards
+
+The following functionality remains to be implemented:
+
+* Import cards
+* Export cards
+* User settings (ie, change username / password)
+
+## Build
+To build, `cd` to project root and run:
+```
+$ npm install && npm run build
+```
+This should install dependencies and then output a transpiled version of app.js to `dist`.
+
+## Run
+To run the app in development, it is suggested you use the following command from the project root:
+```
+$ npm run dev
+```
+This will utilize `concurrently` to run both the server and client simultaneously. If instead you wish to run them independently, see the project's `package.json` for the relavent script commands.
+
+## Usage
+First, before running you will want to set up a Mongo database, which can be local or remote. Once this is done you can plug it's URI into the `DB_URI` variable of `server/config/config.js`.
+
+After that, you should be able to run the app and create a user account. From there, you can add decks, cards, study them, etc.
+
+## License
+The source of this app may be used under the WTFPL - or, if you take issue with that, consider it to be under the CC0.
+
+## Contributing
+Feedback and contributions are welcome. Feel free to create issues, fork, submit pull requests, etc. However, if you make any changes to the application logic, make sure to run the full test suite before opening a PR. 
+
+To run tests, simply execute the following in the project root:
+```
+$ npm test
+```
+
+**PR's that do *not* include output from the above command will be rejected automatically!**
+
+Finally, if you want to contribute in a different way, you can always buy me a coffee ^_^
+
+[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png)](https://www.buymeacoffee.com
+
