@@ -88,7 +88,6 @@ function Table(props) {
 
   const [errors, setErrors] = React.useState({ emptyDeck: null });
 
-
   React.useEffect(() => {
     setState(props.data);
   }, [props.data]);
@@ -249,6 +248,7 @@ function Table(props) {
         ]}
         options={{
           actionsColumnIndex: -1
+
         }}
       />
       {isBrowsingCardsState == true && (

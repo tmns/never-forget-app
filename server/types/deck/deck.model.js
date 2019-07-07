@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { UserInputError } from "apollo-server-core";
 
+import { Card } from '../card/card.model';
+
 const deckSchema = new mongoose.Schema(
   {
     name: {
@@ -84,6 +86,12 @@ deckSchema.statics.findAndDeleteDeck = async function(_id, createdBy) {
   if (!foundDeck) {
     throw new UserInputError(`No deck with id ${_id} found`);
   }
+
+  // delete all cards associated with deck
+  var cards = await Card.findCards(_id, createdBy);
+
+  await asyncFindAndDelete(cards, createdBy);
+
   return await this.findByIdAndDelete(_id).lean();
 };
 
@@ -94,6 +102,18 @@ function trimProps(props) {
     tProps[key] = props[key].trim();
   }
   return tProps;
+}
+
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
+async function asyncFindAndDelete(cards, createdBy) {
+  await asyncForEach(cards, async card => {
+    await Card.findAndDeleteCard(card._id, createdBy);
+  })
 }
 
 export const Deck = mongoose.model("deck", deckSchema);
