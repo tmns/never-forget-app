@@ -107,7 +107,6 @@ async function updateCardInDB(oldData, newData, deckId) {
 }
 
 async function updateCardProgress(data, deckId) {
-  console.log(data, deckId)
   var id = await getCardId(data.prompt, deckId);
   var variables = {
     input: {

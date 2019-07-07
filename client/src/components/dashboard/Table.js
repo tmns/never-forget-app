@@ -112,6 +112,10 @@ function Table(props) {
               setTimeout(async () => {
                 resolve();
                 const data = [...state.data];
+                // trim all inputs
+                for (let key of Object.keys(newData)) {
+                  newData[key] = newData[key].trim();
+                }
                 data.push(newData);
                 setState({ ...state, data });
 
@@ -214,6 +218,7 @@ function Table(props) {
             tooltip: "Browse",
             hidden: isActionHidden,
             onClick: async (event, rowData) => {
+              console.log(rowData)
               setErrors({emptyDeck: null});
               var deckId = await getDeckId(rowData.name);
               var variables = { deckId };

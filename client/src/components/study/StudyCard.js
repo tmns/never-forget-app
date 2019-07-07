@@ -208,14 +208,14 @@ function StudyCard(props) {
 
   return (
     <Card className={classes.card}>
-      <CardHeader
+      {/* <CardHeader
         className={classes.header}
         action={
           <IconButton aria-label="Settings">
             <MoreVertIcon />
           </IconButton>
         }
-      />
+      /> */}
       <CardContent>
         <Typography variant="h5" component="h2">
           {session.cards[0].prompt}

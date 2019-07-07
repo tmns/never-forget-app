@@ -110,7 +110,6 @@ function SignIn({ history, signIn }) {
         initialValues={initialState}
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
-          console.log(values);
           const variables = {
             input: {
               username: values.username,
