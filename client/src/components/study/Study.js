@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Study = ({ session, size, cards, setStudyState }) => {
+const Study = ({ session, size, cards, deckId, setStudyState }) => {
   const classes = useStyles();
 
   const [numCards, setNumCards] = useState(cards.length);
@@ -80,7 +80,7 @@ const Study = ({ session, size, cards, setStudyState }) => {
           <Typography component="h4" className={classes.para} align="center">
             You have {NumCardsStyled} cards to study for this deck.
           </Typography>
-          <StudyCard cards={cards} numCards={numCards} setNumCards={setNumCards}/>
+          <StudyCard deckId={deckId} cards={cards} numCards={numCards} setNumCards={setNumCards}/>
           <div
             onClick={() => {
               setStudyState({ isStudying: false });

@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
+import ms from "ms";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -15,6 +16,8 @@ import ThumbDown from "@material-ui/icons/ThumbDown";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Divider from "@material-ui/core/Divider";
 import { Tooltip } from "@material-ui/core";
+
+import { updateCardProgress } from "../../apollo/card";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -62,6 +65,69 @@ const StyledActions = withStyles({
   }
 })(CardActions);
 
+// helper function to calculate new progress values of card
+// ie, update review date and interval progres
+function getNewProgressValues(score, intervalProgress, now) {
+  var intervals = [2, 4, 6, 16, 34];
+  var scoreToIntervalChange = [-3, 1];
+
+  var knewImmediately = false;
+  if (score == scoreToIntervalChange.length - 1) {
+    knewImmediately = true;
+  }
+
+  var nextReview = now + 2;
+  if (knewImmediately) {
+    if (intervalProgress < intervals.length) {
+      nextReview = now + intervals[intervalProgress];
+    } else if (intervalProgress >= intervals.length) {
+      nextReview =
+        now +
+        intervals.slice(-1) * (intervalProgress + 1 - intervals.length) * 2;
+    }
+  }
+
+  let newIntervalProgress = intervalProgress + scoreToIntervalChange[score];
+  if (newIntervalProgress < 0) {
+    newIntervalProgress = 0;
+  }
+
+  return {
+    nextReview,
+    newIntervalProgress
+  };
+}
+
+async function updateProgress(card, score, deckId) {
+  // calculate new progress values
+  let now = Math.floor(new Date().getTime() / ms("1h"));
+  let { nextReview, newIntervalProgress } = getNewProgressValues(
+    score,
+    card.intervalProgress,
+    now
+  );
+
+  // calculate next time string for ui display
+  let nextTime = nextReview - now;
+  let nextTimeString = `${nextTime} hours`;
+  if (nextTime > 24) {
+    nextTimeString = `${Math.floor(nextTime / 24)} day(s)`;
+  }
+  // Do something with nextTimeString (eg display to user)
+
+  // attempt to update card progress values in db
+  try {
+    let data = {
+      prompt: card.prompt,
+      nextReview,
+      newIntervalProgress
+    };
+    await updateCardProgress(data, deckId);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function StudyCard(props) {
   const classes = useStyles();
 
@@ -76,11 +142,15 @@ function StudyCard(props) {
     setExpanded(!expanded);
   }
 
-  function handleNoClick() {
+  async function handleNoClick() {
     setExpanded(false);
-    // do logic for NOT remembering
+
+    // if not demo cards on landing page
     if (!props.demo) {
-      props.setNumCards(props.numCards - 1)
+      props.setNumCards(props.numCards - 1);
+
+      // attempt to update progress values
+      await updateProgress(session.cards[0], 0, props.deckId);
     }
 
     // we delay here so the answer isnt revealed as the expansion closes
@@ -105,10 +175,13 @@ function StudyCard(props) {
     }, 250);
   }
 
-  function handleYesClick() {
+  async function handleYesClick() {
     setExpanded(false);
     if (!props.demo) {
-      props.setNumCards(props.numCards - 1)
+      props.setNumCards(props.numCards - 1);
+
+      // attempt to update progress values
+      await updateProgress(session.cards[0], 1, props.deckId);
     }
     // do logic for remembering
 

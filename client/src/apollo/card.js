@@ -12,6 +12,20 @@ const cardsQuery = gql`
   }
 `;
 
+const cardsQueryWithProgress = gql`
+  query getCards($deckId: ID!) {
+    cards(deckId: $deckId) {
+      prompt
+      target
+      promptExample
+      targetExample
+      timeAdded
+      nextReview
+      intervalProgress
+    }
+  }
+`;
+
 const cardIdsQuery = gql`
     query getCards($deckId: ID!) {
       cards(deckId: $deckId) {
@@ -83,7 +97,7 @@ async function updateCardInDB(oldData, newData, deckId) {
       promptExample: newData.promptExample,
       targetExample: newData.targetExample
     },
-    id,
+    id
   };
   try {
     return await updateCard(variables);
@@ -92,11 +106,30 @@ async function updateCardInDB(oldData, newData, deckId) {
   }
 }
 
+async function updateCardProgress(data, deckId) {
+  console.log(data, deckId)
+  var id = await getCardId(data.prompt, deckId);
+  var variables = {
+    input: {
+      nextReview: data.nextReview,
+      intervalProgress: data.newIntervalProgress
+    },
+    id
+  };
+  try {
+    return await updateCard(variables);
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 export {
   cardsQuery,
+  cardsQueryWithProgress,
   getCardId,
   addCard,
   updateCard,
   updateCardInDB,
+  updateCardProgress,
   removeCard
 }

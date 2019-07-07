@@ -92,7 +92,7 @@ const Dashboard = ({ session, size }) => {
     );
   } else {
     return (
-      <Study cards={studyState.cards} setStudyState={setStudyState}/>
+      <Study cards={studyState.cards} deckId={studyState.deckId} setStudyState={setStudyState} />
     )
   }
 };

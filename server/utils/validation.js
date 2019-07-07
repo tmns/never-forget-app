@@ -9,14 +9,25 @@ function isValidPassword(password) {
 }
 
 function hasValidInputs({ prompt, target, promptExample, targetExample }) {
-  if (prompt.length < 1 || prompt.length > 300) {
-    return false;
+  if (prompt) {
+    if (prompt.length < 1 || prompt.length > 300) {
+      return false;
+    }  
   }
-  if (target.length < 1 || target.length > 300) {
-    return false;
+  if (target) {
+    if (target.length < 1 || target.length > 300) {
+      return false;
+    }  
   }
-  if (promptExample.length > 300 || targetExample.length > 300) {
-    return false;
+  if (promptExample) {
+    if (promptExample.length > 300) {
+      return false;
+    }
+  }
+  if (targetExample) {
+    if (targetExample.length > 300) {
+      return false;
+    }  
   }
   return true;
 }

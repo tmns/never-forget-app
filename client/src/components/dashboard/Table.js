@@ -33,6 +33,7 @@ import {
 
 import {
   cardsQuery,
+  cardsQueryWithProgress,
   addCard,
   updateCardInDB,
   getCardId,
@@ -191,18 +192,20 @@ function Table(props) {
               setErrors({ emptyDeck: null });
               var deckId = await getDeckId(rowData.name);
               var data = await client.query({
-                query: cardsQuery,
+                query: cardsQueryWithProgress,
                 variables: { deckId },
                 fetchPolicy: "no-cache"
               });
-              var cards = data.data.cards;
-              if (cards.length == 0) {
+              var allCards = data.data.cards;
+              var overDueCards = allCards.filter(card => card.nextReview <= Math.floor(new Date().getTime() / ms('1h')));
+              if (overDueCards.length == 0) {
                 setErrors({
                   emptyDeck:
                     "Sorry, this deck has no cards to study. Please choose a different one."
                 });
               } else {
-                props.setStudyState({ isStudying: true, deckId, cards });
+                let overDueCardsSorted = overDueCards.sort((a, b) => a.timeAdded - b.timeAdded); 
+                props.setStudyState({ isStudying: true, deckId, cards: overDueCardsSorted });
               }
             }
           },
