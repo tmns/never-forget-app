@@ -83,10 +83,11 @@ const useStyles = makeStyles(theme => ({
 
 function Table(props) {
   const classes = useStyles();
-
+  
   const [state, setState] = React.useState(props.data);
 
   const [errors, setErrors] = React.useState({ emptyDeck: null });
+
 
   React.useEffect(() => {
     setState(props.data);
@@ -122,6 +123,7 @@ function Table(props) {
                 // add deck to database
                 try {
                   if (!isBrowsingCardsState) {
+                    props.setDeckData({...state, data})
                     await addDeck({
                       input: {
                         name: newData.name,
@@ -157,6 +159,7 @@ function Table(props) {
                 setState({ ...state, data });
 
                 if (!isBrowsingCardsState) {
+                  props.setDeckData({...state, data})
                   await updateDeckInDB(oldData, newData);
                 } else {
                   await updateCardInDB(oldData, newData, state.deckId);
@@ -173,6 +176,7 @@ function Table(props) {
 
                 try {
                   if (!isBrowsingCardsState) {
+                    props.setDeckData({...state, data})
                     var id = await getDeckId(oldData.name);
                     var variables = { id };
                     await removeDeck(variables);
@@ -218,7 +222,6 @@ function Table(props) {
             tooltip: "Browse",
             hidden: isActionHidden,
             onClick: async (event, rowData) => {
-              console.log(rowData)
               setErrors({emptyDeck: null});
               var deckId = await getDeckId(rowData.name);
               var variables = { deckId };

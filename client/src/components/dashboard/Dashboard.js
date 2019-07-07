@@ -85,7 +85,7 @@ const Dashboard = ({ session, size }) => {
           >
             Welcome back, {session.username}!
           </Typography>
-          <Table data={deckData} setStudyState={setStudyState}/>
+          <Table data={deckData} setDeckData={setDeckData} setStudyState={setStudyState}/>
         </Container>
         <Footer />
       </Fragment>  
