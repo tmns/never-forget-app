@@ -75,9 +75,10 @@ const useStyles = makeStyles(theme => ({
   },
   error: {
     color: CustomTheme.palette.primary.contrastText,
-    fontSize: "17px",
+    fontSize: "15px",
     fontWeight: "300",
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    textAlign: "center"
   }
 }));
 
@@ -173,15 +174,17 @@ function Table(props) {
                 data.splice(data.indexOf(oldData), 1);
                 setState({ ...state, data });
 
+                var id, variables;
+
                 try {
                   if (!isBrowsingCardsState) {
                     props.setDeckData({...state, data})
-                    var id = await getDeckId(oldData.name);
-                    var variables = { id };
+                    id = await getDeckId(oldData.name);
+                    variables = { id };
                     await removeDeck(variables);
                   } else {
-                    var id = await getCardId(oldData.prompt, state.deckId);
-                    var variables = { id };
+                    id = await getCardId(oldData.prompt, state.deckId);
+                    variables = { id };
                     await removeCard(variables);
                   }
                 } catch (e) {
@@ -208,7 +211,7 @@ function Table(props) {
               if (overDueCards.length == 0) {
                 setErrors({
                   emptyDeck:
-                    "Sorry, this deck has no cards to study. Please choose a different one."
+                    "Sorry, this deck has no cards scheduled for review at this time."
                 });
               } else {
                 let overDueCardsSorted = overDueCards.sort((a, b) => a.timeAdded - b.timeAdded); 

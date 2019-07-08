@@ -183,7 +183,6 @@ function StudyCard(props) {
       // attempt to update progress values
       await updateProgress(session.cards[0], 1, props.deckId);
     }
-    // do logic for remembering
 
     setTimeout(() => {
       if (session.cards.length > 1) {
@@ -228,10 +227,7 @@ function StudyCard(props) {
       <div className={session.reviewFinished ? classes.hide : ""}>
         <StyledActions>
           <Tooltip title="This was hard!">
-            <IconButton
-              aria-label="Mark not remembered"
-              onClick={handleNoClick}
-            >
+            <IconButton aria-label="Mark hard" onClick={handleNoClick}>
               <ThumbDown />
             </IconButton>
           </Tooltip>
@@ -248,7 +244,7 @@ function StudyCard(props) {
             </IconButton>
           </Tooltip>
           <Tooltip title="This was easy!">
-            <IconButton aria-label="Mark remembered" onClick={handleYesClick}>
+            <IconButton aria-label="Mark easy" onClick={handleYesClick}>
               <ThumbUp />
             </IconButton>
           </Tooltip>
