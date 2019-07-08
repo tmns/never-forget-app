@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 
 import { signOut } from "../../actions/session";
+import VertMenu from "./VertMenu";
 
 import CustomTheme from "./CustomTheme";
 
@@ -38,6 +39,16 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1, 1.5),
     color: CustomTheme.palette.secondary.main,
     borderColor: CustomTheme.palette.secondary.main
+  },
+  linkWrapper: {
+    [theme.breakpoints.down("md")]: {
+      display: "none"
+    }  
+  },
+  vertMenu: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none"
+    }
   }
 }));
 
@@ -97,10 +108,13 @@ function Navbar({ signOut, loggedIn }) {
               className={classes.toolbarTitle}
             >
               <Link className={classes.link} to={loggedIn ? "/dashboard" : "/"}>
-              {loggedIn ? "Dashboard" : "Never Forget"}
+                {loggedIn ? "Dashboard" : "Never Forget"}
               </Link>
             </Typography>
-            {loggedIn ? authLinks : guestLinks}
+            <div className={classes.linkWrapper}>
+              {loggedIn ? authLinks : guestLinks}
+            </div>
+            <VertMenu className={classes.vertMenu} loggedIn={loggedIn} />
           </Toolbar>
         </AppBar>
       </ThemeProvider>
