@@ -80,6 +80,15 @@ function Navbar({ signOut, loggedIn }) {
   const authLinks = (
     <nav>
       <Button
+        component={Link}
+        to="/settings"
+        color="primary"
+        variant="outlined"
+        className={classes.link}
+      >
+        Settings
+      </Button>
+      <Button
         onClick={signOut}
         color="primary"
         variant="outlined"
