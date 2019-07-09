@@ -41,12 +41,12 @@ const useStyles = makeStyles(theme => ({
     borderColor: CustomTheme.palette.secondary.main
   },
   linkWrapper: {
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("sm")]: {
       display: "none"
     }  
   },
-  vertMenu: {
-    [theme.breakpoints.down("sm")]: {
+  vertMenuWrapper: {
+    [theme.breakpoints.between("md", "xl")]: {
       display: "none"
     }
   }
@@ -114,7 +114,9 @@ function Navbar({ signOut, loggedIn }) {
             <div className={classes.linkWrapper}>
               {loggedIn ? authLinks : guestLinks}
             </div>
-            <VertMenu className={classes.vertMenu} loggedIn={loggedIn} />
+            <div className={classes.vertMenuWrapper}>
+              <VertMenu className={classes.vertMenu} loggedIn={loggedIn} />
+            </div>
           </Toolbar>
         </AppBar>
       </ThemeProvider>

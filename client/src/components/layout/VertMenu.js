@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,6 +8,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from "@material-ui/core/styles";
 
 import CustomTheme from "../layout/CustomTheme";
+import { signOut } from "../../actions/session";
+
 
 const useStyles = makeStyles(theme => ({
   iconButton: {
@@ -13,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function VertMenu({ loggedIn }) {
+function VertMenu({ signOut, loggedIn }) {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -44,13 +48,20 @@ function VertMenu({ loggedIn }) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {!loggedIn && <MenuItem onClick={handleClose}>Sign In</MenuItem>}
-        {!loggedIn && <MenuItem onClick={handleClose}>Sign Up</MenuItem>}
+        {!loggedIn && <MenuItem component={Link} to="/signin">Sign In</MenuItem>}
+        {!loggedIn && <MenuItem component={Link} to="/signup">Sign Up</MenuItem>}
         {loggedIn && <MenuItem onClick={handleClose}>Settings</MenuItem>}
-        {loggedIn && <MenuItem onClick={handleClose}>Logout</MenuItem>}
+        {loggedIn && <MenuItem onClick={signOut}>Logout</MenuItem>}
       </Menu>
     </div>
   );
 }
 
-export default VertMenu;
+const mapDispatchToProps = dispatch => ({
+  signOut: () => dispatch(signOut())
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(VertMenu);
