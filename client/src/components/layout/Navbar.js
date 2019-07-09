@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   linkWrapper: {
     [theme.breakpoints.down("sm")]: {
       display: "none"
-    }  
+    }
   },
   vertMenuWrapper: {
     [theme.breakpoints.between("md", "xl")]: {

@@ -9,6 +9,7 @@ import AuthRoute from "./components/common/AuthRoute";
 import Landing from './components/layout/Landing';
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
+import Settings from "./components/settings/Settings";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <AuthRoute exact path="/signup" component={SignUp} />
         <AuthRoute exact path="/signin" component={SignIn} />
         <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+        <ProtectedRoute exact path="/settings" component={Settings} />
       </div>
     </BrowserRouter>
   );
