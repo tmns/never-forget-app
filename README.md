@@ -7,6 +7,8 @@ Never Forget is a spaced repetition learning app designed to be as simple as pos
 So far, most of the main functionality has been implemented. You can:
 
 * Create an account (ie, a user)
+* Change your username
+* Change your password
 * Create a deck
 * Create a card
 * Browse decks
@@ -16,7 +18,6 @@ So far, most of the main functionality has been implemented. You can:
 * Delete a deck
 * Delete a card
 * Study cards
-* User settings (ie, change username / password)
 
 The following functionality remains to be implemented:
 
