@@ -16,12 +16,12 @@ So far, most of the main functionality has been implemented. You can:
 * Delete a deck
 * Delete a card
 * Study cards
+* User settings (ie, change username / password)
 
 The following functionality remains to be implemented:
 
 * Import cards
 * Export cards
-* User settings (ie, change username / password)
 
 ## Build
 To build, `cd` to project root and run:
