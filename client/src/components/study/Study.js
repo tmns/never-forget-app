@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
-import IconButton from "@material-ui/core/IconButton";  
+import IconButton from "@material-ui/core/IconButton";
 
 import CustomTheme from "../layout/CustomTheme";
 import Navbar from "../layout/Navbar";
@@ -80,7 +80,12 @@ const Study = ({ session, size, cards, deckId, setStudyState }) => {
           <Typography component="h4" className={classes.para} align="center">
             You have {NumCardsStyled} cards to study for this deck.
           </Typography>
-          <StudyCard deckId={deckId} cards={cards} numCards={numCards} setNumCards={setNumCards}/>
+          <StudyCard
+            deckId={deckId}
+            cards={cards}
+            numCards={numCards}
+            setNumCards={setNumCards}
+          />
           <div
             onClick={() => {
               setStudyState({ isStudying: false });

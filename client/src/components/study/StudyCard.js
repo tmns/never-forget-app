@@ -145,17 +145,17 @@ function StudyCard(props) {
       variables: { deckId: props.deckId },
       fetchPolicy: "no-cache"
     });
-    
+
     var nextReviewObject = data.data.cards.reduce((acc, val) => {
-      acc = ( acc === undefined || val < acc) ? val : acc;
+      acc = acc === undefined || val < acc ? val : acc;
       return acc;
     });
 
-    let now = Math.floor(new Date().getTime() / ms("1h"));    
+    let now = Math.floor(new Date().getTime() / ms("1h"));
     let nextReviewFromNow = nextReviewObject.nextReview - now;
     return nextReviewFromNow;
   }
-  
+
   function handleExpandClick() {
     setExpanded(!expanded);
   }
@@ -185,8 +185,7 @@ function StudyCard(props) {
           cards: [
             {
               prompt: "All cards reviewed!",
-              promptExample:
-                `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTime} hours for another review!`
+              promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTime} hour(s) for another review!`
             }
           ]
         });
@@ -216,8 +215,7 @@ function StudyCard(props) {
           cards: [
             {
               prompt: "All cards reviewed!",
-              promptExample:
-              `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTime} hours for another review!`
+              promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTime} hour(s) for another review!`
             }
           ]
         });

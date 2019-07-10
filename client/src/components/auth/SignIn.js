@@ -133,7 +133,7 @@ function SignIn({ history, signIn }) {
               <Link className={classes.link} to="/">
                 <ArrowBackOutlinedIcon />
               </Link>
-            </Container>            
+            </Container>
             <Container component="main" maxWidth="xs">
               <CssBaseline />
               <div className={classes.paper}>
@@ -216,7 +216,11 @@ function SignIn({ history, signIn }) {
                   </Button>
                   <Grid container justify="flex-end">
                     <Grid item>
-                      <Link className={classes.link} to="/signup" variant="body2">
+                      <Link
+                        className={classes.link}
+                        to="/signup"
+                        variant="body2"
+                      >
                         Don't have an account? Sign Up!
                       </Link>
                     </Grid>

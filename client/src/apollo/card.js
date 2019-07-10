@@ -2,12 +2,12 @@ import { gql } from "apollo-boost";
 import client from "./client";
 
 const cardsQuery = gql`
-    query getCards($deckId: ID!) {
-      cards(deckId: $deckId) {
-        prompt
-        target
-        promptExample
-        targetExample
+  query getCards($deckId: ID!) {
+    cards(deckId: $deckId) {
+      prompt
+      target
+      promptExample
+      targetExample
     }
   }
 `;
@@ -35,10 +35,10 @@ const cardsQueryNextReview = gql`
 `;
 
 const cardIdsQuery = gql`
-    query getCards($deckId: ID!) {
-      cards(deckId: $deckId) {
-        prompt
-        _id
+  query getCards($deckId: ID!) {
+    cards(deckId: $deckId) {
+      prompt
+      _id
     }
   }
 `;
@@ -125,7 +125,7 @@ async function updateCardProgress(data, deckId) {
   };
   try {
     return await updateCard(variables);
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 }
@@ -140,4 +140,4 @@ export {
   updateCardInDB,
   updateCardProgress,
   removeCard
-}
+};

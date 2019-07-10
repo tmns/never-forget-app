@@ -68,7 +68,7 @@ const useStyles = makeStyles(theme => ({
       color: CustomTheme.palette.secondary.dark,
       backgroundColor: CustomTheme.palette.primary.main
     },
-    fontWeight: "300",
+    fontWeight: "300"
   },
   input: {
     display: "none"
@@ -84,7 +84,7 @@ const useStyles = makeStyles(theme => ({
 
 function Table(props) {
   const classes = useStyles();
-  
+
   const [state, setState] = React.useState(props.data);
 
   const [errors, setErrors] = React.useState({ emptyDeck: null });
@@ -123,7 +123,7 @@ function Table(props) {
                 // add deck to database
                 try {
                   if (!isBrowsingCardsState) {
-                    props.setDeckData({...state, data})
+                    props.setDeckData({ ...state, data });
                     await addDeck({
                       input: {
                         name: newData.name,
@@ -159,7 +159,7 @@ function Table(props) {
                 setState({ ...state, data });
 
                 if (!isBrowsingCardsState) {
-                  props.setDeckData({...state, data})
+                  props.setDeckData({ ...state, data });
                   await updateDeckInDB(oldData, newData);
                 } else {
                   await updateCardInDB(oldData, newData, state.deckId);
@@ -178,7 +178,7 @@ function Table(props) {
 
                 try {
                   if (!isBrowsingCardsState) {
-                    props.setDeckData({...state, data})
+                    props.setDeckData({ ...state, data });
                     id = await getDeckId(oldData.name);
                     variables = { id };
                     await removeDeck(variables);
@@ -207,15 +207,24 @@ function Table(props) {
                 fetchPolicy: "no-cache"
               });
               var allCards = data.data.cards;
-              var overDueCards = allCards.filter(card => card.nextReview <= Math.floor(new Date().getTime() / ms('1h')));
+              var overDueCards = allCards.filter(
+                card =>
+                  card.nextReview <= Math.floor(new Date().getTime() / ms("1h"))
+              );
               if (overDueCards.length == 0) {
                 setErrors({
                   emptyDeck:
                     "Sorry, this deck has no cards scheduled for review at this time."
                 });
               } else {
-                let overDueCardsSorted = overDueCards.sort((a, b) => a.timeAdded - b.timeAdded); 
-                props.setStudyState({ isStudying: true, deckId, cards: overDueCardsSorted });
+                let overDueCardsSorted = overDueCards.sort(
+                  (a, b) => a.timeAdded - b.timeAdded
+                );
+                props.setStudyState({
+                  isStudying: true,
+                  deckId,
+                  cards: overDueCardsSorted
+                });
               }
             }
           },
@@ -224,7 +233,7 @@ function Table(props) {
             tooltip: "Browse",
             hidden: isActionHidden,
             onClick: async (event, rowData) => {
-              setErrors({emptyDeck: null});
+              setErrors({ emptyDeck: null });
               var deckId = await getDeckId(rowData.name);
               var variables = { deckId };
               var data = await client.query({
@@ -251,7 +260,6 @@ function Table(props) {
         ]}
         options={{
           actionsColumnIndex: -1
-
         }}
       />
       {isBrowsingCardsState == true && (

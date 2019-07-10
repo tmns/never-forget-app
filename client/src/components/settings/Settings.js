@@ -112,35 +112,34 @@ function Settings({ history }) {
                 username: values.newUsername,
                 password: values.currentPassword
               }
-            }
+            };
             let passwordVars = {
               input: {
                 password: values.currentPassword,
                 newPassword: values.newPassword,
                 confirmPassword: values.confirmNewPassword
               }
-            }
+            };
             try {
               await updateUsername(usernameVars);
               await updatePassword(passwordVars);
               actions.setSubmitting(false);
-              console.log('success')
-            } catch(e) {
+              console.log("success");
+            } catch (e) {
               console.log(e);
             }
-          }
-          else if (values.newUsername) {
+          } else if (values.newUsername) {
             let variables = {
               input: {
                 username: values.newUsername,
                 password: values.currentPassword
               }
-            }
+            };
             try {
               await updateUsername(variables);
               actions.setSubmitting(false);
-              console.log('success')
-            } catch(e) {
+              console.log("success");
+            } catch (e) {
               console.log(e);
             }
           } else if (values.newPassword) {
@@ -150,12 +149,12 @@ function Settings({ history }) {
                 newPassword: values.newPassword,
                 confirmPassword: values.confirmNewPassword
               }
-            }
+            };
             try {
               await updatePassword(variables);
               actions.setSubmitting(false);
-              console.log('success')
-            } catch(e) {
+              console.log("success");
+            } catch (e) {
               console.log(e);
               actions.setStatus({ msg: "Invalid details." });
             }
@@ -205,7 +204,8 @@ function Settings({ history }) {
                       props.touched.newUsername ? props.errors.newUsername : ""
                     }
                     error={
-                      props.touched.newUsername && Boolean(props.errors.newUsername)
+                      props.touched.newUsername &&
+                      Boolean(props.errors.newUsername)
                     }
                   />
                   <CssTextField
@@ -230,9 +230,7 @@ function Settings({ history }) {
                     onChange={props.handleChange}
                     value={props.values.newPassword}
                     helperText={
-                      props.touched.newPassword
-                        ? props.errors.newPassword
-                        : ""
+                      props.touched.newPassword ? props.errors.newPassword : ""
                     }
                     error={
                       props.touched.newPassword &&
@@ -269,7 +267,7 @@ function Settings({ history }) {
                       props.touched.confirmNewPassword &&
                       Boolean(props.errors.confirmNewPassword)
                     }
-                  />                  
+                  />
                   <CssTextField
                     InputProps={{
                       classes: {
