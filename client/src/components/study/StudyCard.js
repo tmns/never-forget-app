@@ -17,7 +17,8 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Divider from "@material-ui/core/Divider";
 import { Tooltip } from "@material-ui/core";
 
-import { updateCardProgress } from "../../apollo/card";
+import client from "../../apollo/client";
+import { updateCardProgress, cardsQueryNextReview } from "../../apollo/card";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -138,6 +139,23 @@ function StudyCard(props) {
     reviewFinished: false
   });
 
+  async function getNextReviewTime() {
+    var data = await client.query({
+      query: cardsQueryNextReview,
+      variables: { deckId: props.deckId },
+      fetchPolicy: "no-cache"
+    });
+    
+    var nextReviewObject = data.data.cards.reduce((acc, val) => {
+      acc = ( acc === undefined || val < acc) ? val : acc;
+      return acc;
+    });
+
+    let now = Math.floor(new Date().getTime() / ms("1h"));    
+    let nextReviewFromNow = nextReviewObject.nextReview - now;
+    return nextReviewFromNow;
+  }
+  
   function handleExpandClick() {
     setExpanded(!expanded);
   }
@@ -154,20 +172,21 @@ function StudyCard(props) {
     }
 
     // we delay here so the answer isnt revealed as the expansion closes
-    setTimeout(() => {
+    setTimeout(async () => {
       if (session.cards.length > 1) {
         setSession({
           ...session,
           cards: session.cards.slice(1)
         });
       } else {
+        let nextReviewTime = await getNextReviewTime();
         setSession({
           reviewFinished: true,
           cards: [
             {
               prompt: "All cards reviewed!",
               promptExample:
-                "Great job! You have reviewed all the cards for this deck. Check back soon for another review!"
+                `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTime} hours for another review!`
             }
           ]
         });
@@ -184,20 +203,21 @@ function StudyCard(props) {
       await updateProgress(session.cards[0], 1, props.deckId);
     }
 
-    setTimeout(() => {
+    setTimeout(async () => {
       if (session.cards.length > 1) {
         setSession({
           ...session,
           cards: session.cards.slice(1)
         });
       } else {
+        let nextReviewTime = await getNextReviewTime();
         setSession({
           reviewFinished: true,
           cards: [
             {
               prompt: "All cards reviewed!",
               promptExample:
-                "Great job! You have reviewed all the cards for this deck. Check back soon for another review!"
+              `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTime} hours for another review!`
             }
           ]
         });

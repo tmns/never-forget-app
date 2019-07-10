@@ -26,6 +26,14 @@ const cardsQueryWithProgress = gql`
   }
 `;
 
+const cardsQueryNextReview = gql`
+  query getCards($deckId: ID!) {
+    cards(deckId: $deckId) {
+      nextReview
+    }
+  }
+`;
+
 const cardIdsQuery = gql`
     query getCards($deckId: ID!) {
       cards(deckId: $deckId) {
@@ -125,6 +133,7 @@ async function updateCardProgress(data, deckId) {
 export {
   cardsQuery,
   cardsQueryWithProgress,
+  cardsQueryNextReview,
   getCardId,
   addCard,
   updateCard,
