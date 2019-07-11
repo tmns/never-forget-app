@@ -75,10 +75,6 @@ async function start() {
 
   server.applyMiddleware({ app, cors: false });
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'index.js'));
-  });
-
   try {
     await connect(config.DB_URL);
   } catch (err) {
