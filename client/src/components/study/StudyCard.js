@@ -179,7 +179,12 @@ function StudyCard(props) {
           cards: session.cards.slice(1)
         });
       } else {
-        let nextReviewTime = await getNextReviewTime();
+        let nextReviewTime;
+        if (!props.demo) {
+          nextReviewTime = await getNextReviewTime();
+        } else {
+          nextReviewTime = '2'; // arbitrary example next review time
+        }
         setSession({
           reviewFinished: true,
           cards: [
@@ -209,7 +214,12 @@ function StudyCard(props) {
           cards: session.cards.slice(1)
         });
       } else {
-        let nextReviewTime = await getNextReviewTime();
+        let nextReviewTime;
+        if (!props.demo) {
+          nextReviewTime = await getNextReviewTime();
+        } else {
+          nextReviewTime = '2'; // arbitrary example next review time
+        }
         setSession({
           reviewFinished: true,
           cards: [
