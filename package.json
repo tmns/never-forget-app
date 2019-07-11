@@ -14,7 +14,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "restart": "rimraf dist && yarn build && yarn start",
     "start": "npm run dev",
-    "heroku-postbuild": "npm install && npm run client-install"
+    "heroku-postbuild": "npm install --dev=only && npm install && npm run client-install"
   },
   "repository": {
     "type": "git",
