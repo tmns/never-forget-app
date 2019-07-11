@@ -12,9 +12,8 @@
     "client": "npm start --prefix client",
     "client-install": "npm install --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "prod": "concurrently \"node dist/index.js\" \"npm start --prefix client\"",
     "restart": "rimraf dist && yarn build && yarn start",
-    "start": "npm run prod",
+    "start": "node dist/index.js",
     "heroku-postbuild": "npm install && npm run build && cd client && npm install && npm run build"
   },
   "repository": {
@@ -53,6 +52,7 @@
     "cross-env": "^5.2.0",
     "graphql-codegen-core": "^0.18.2",
     "jest": "^24.8.0",
+    "concurrently": "^4.1.0",
     "nodemon": "^1.19.1",
     "rimraf": "^2.6.3",
     "supertest": "^4.0.2"
@@ -70,7 +70,6 @@
     "restoreMocks": true
   },
   "dependencies": {
-    "concurrently": "^4.1.0",
     "apollo-server-express": "^2.5.0",
     "bcrypt": "^3.0.6",
     "connect-mongodb-session": "^2.1.1",
