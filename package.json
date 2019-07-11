@@ -14,7 +14,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "restart": "rimraf dist && yarn build && yarn start",
     "start": "npm run dev",
-    "heroku-postbuild": "npm install && npm install --only=dev && cd client/ && npm install && npm install --only=dev"
+    "heroku-postbuild": "npm install && npm run client-install"
   },
   "repository": {
     "type": "git",
@@ -49,12 +49,9 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
-    "concurrently": "^4.1.0",
     "cross-env": "^5.2.0",
     "graphql-codegen-core": "^0.18.2",
     "jest": "^24.8.0",
-    "nodemon": "^1.19.1",
-    "rimraf": "^2.6.3",
     "supertest": "^4.0.2"
   },
   "jest": {
@@ -70,6 +67,9 @@
     "restoreMocks": true
   },
   "dependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.19.1",
+    "rimraf": "^2.6.3",
     "apollo-server-express": "^2.5.0",
     "bcrypt": "^3.0.6",
     "connect-mongodb-session": "^2.1.1",
