@@ -13,8 +13,8 @@
     "client-install": "npm install --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "restart": "rimraf dist && yarn build && yarn start",
-    "start": "node dist/index.js",
-    "heroku-postbuild": "npm install && npm client-install && npm run dev"
+    "start": "npm run dev",
+    "heroku-postbuild": "npm install && npm run client-install"
   },
   "repository": {
     "type": "git",
