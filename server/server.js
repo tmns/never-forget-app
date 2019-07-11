@@ -1,6 +1,7 @@
 "use strict";
 
 import express from "express";
+import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import session from "express-session";
 import { merge } from "lodash";
@@ -73,6 +74,10 @@ async function start() {
   app.use(cors(corsOptions));
 
   server.applyMiddleware({ app, cors: false });
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'dist', 'index.js'));
+  });
 
   try {
     await connect(config.DB_URL);
