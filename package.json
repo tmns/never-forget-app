@@ -8,13 +8,14 @@
   "scripts": {
     "build": "babel server --out-dir dist",
     "test": "cross-env NODE_ENV=testing jest --detectOpenHandles",
-    "server": "nodemon --exec npm restart",
+    "server": "nodemon --exec yarn restart",
     "client": "npm start --prefix client",
     "client-install": "npm install --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "restart": "rimraf dist && npm build && npm start",
-    "start": "npm run dev",
-    "heroku-postbuild": "npm install && npm run client-install"
+    "prod": "concurrently \"node dist/index.js\" \"npm start --prefix client\"",
+    "restart": "rimraf dist && yarn build && yarn start",
+    "start": "npm run prod",
+    "heroku-postbuild": "npm install && npm run build && cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -52,6 +53,8 @@
     "cross-env": "^5.2.0",
     "graphql-codegen-core": "^0.18.2",
     "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "rimraf": "^2.6.3",
     "supertest": "^4.0.2"
   },
   "jest": {
@@ -68,8 +71,6 @@
   },
   "dependencies": {
     "concurrently": "^4.1.0",
-    "nodemon": "^1.19.1",
-    "rimraf": "^2.6.3",
     "apollo-server-express": "^2.5.0",
     "bcrypt": "^3.0.6",
     "connect-mongodb-session": "^2.1.1",
