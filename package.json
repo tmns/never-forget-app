@@ -8,11 +8,11 @@
   "scripts": {
     "build": "babel server --out-dir dist",
     "test": "cross-env NODE_ENV=testing jest --detectOpenHandles",
-    "server": "nodemon --exec yarn restart",
+    "server": "nodemon --exec npm restart",
     "client": "npm start --prefix client",
     "client-install": "npm install --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "restart": "rimraf dist && yarn build && yarn start",
+    "restart": "rimraf dist && npm build && npm start",
     "start": "npm run dev",
     "heroku-postbuild": "npm install && npm run client-install"
   },
