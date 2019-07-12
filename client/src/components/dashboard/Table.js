@@ -20,6 +20,7 @@ import OfflineBolt from "@material-ui/icons/OfflineBolt";
 import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+import { MuiThemeProvider } from '@material-ui/core/styles';
 
 import CustomTheme from "../layout/CustomTheme";
 import client from "../../apollo/client";
@@ -102,6 +103,7 @@ function Table(props) {
       {errors.emptyDeck && (
         <div className={classes.error}>{errors.emptyDeck}</div>
       )}
+      <MuiThemeProvider theme={CustomTheme}>
       <MaterialTable
         icons={tableIcons}
         title={state.title}
@@ -259,7 +261,9 @@ function Table(props) {
           }
         ]}
         options={{
-          actionsColumnIndex: -1
+          actionsColumnIndex: -1,
+          exportButton: true,
+          exportFileName: "never-forget-export.csv"
         }}
       />
       {isBrowsingCardsState == true && (
@@ -275,6 +279,7 @@ function Table(props) {
           </IconButton>
         </div>
       )}
+      </MuiThemeProvider>
     </React.Fragment>
   );
 }
