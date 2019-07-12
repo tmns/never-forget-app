@@ -20,11 +20,11 @@ So far, most of the main functionality has been implemented. You can:
 * Delete a deck
 * Delete a card
 * Study cards
+* Export cards (csv)
 
 The following functionality remains to be implemented:
 
-* Import cards
-* Export cards
+* Import cards (this is not yet supported by Material)
 
 ## Build
 To build, `cd` to project root and run:
