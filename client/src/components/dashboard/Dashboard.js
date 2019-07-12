@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import CustomTheme from "../layout/CustomTheme";
 import Navbar from "../layout/Navbar";
 import Table from "./Table";
@@ -85,7 +86,9 @@ const Dashboard = ({ session, size }) => {
           >
             Welcome back, {session.username}!
           </Typography>
-          <Table data={deckData} setDeckData={setDeckData} setStudyState={setStudyState}/>
+          <MuiThemeProvider theme={CustomTheme}>
+            <Table data={deckData} setDeckData={setDeckData} setStudyState={setStudyState}/>
+          </MuiThemeProvider>
         </Container>
         <Footer />
       </Fragment>  
