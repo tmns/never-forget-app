@@ -1,7 +1,9 @@
 import ApolloClient from "apollo-boost";
 
+import * as config from '../config';
+
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
+  uri: `${config.PROTO}://${config.HOST}:${config.PORT}/graphql`,
   credentials: "include"
 });
 

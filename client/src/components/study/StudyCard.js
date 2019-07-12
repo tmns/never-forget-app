@@ -146,13 +146,13 @@ function StudyCard(props) {
       fetchPolicy: "no-cache"
     });
 
-    var nextReviewObject = data.data.cards.reduce((acc, val) => {
-      acc = acc === undefined || val < acc ? val : acc;
+    var nextReviewTime = data.data.cards.reduce((acc, card) => {
+      acc = card.nextReview < acc ? card.nextReview : acc;
       return acc;
-    });
+    }, data.data.cards[0].nextReview);
 
     let now = Math.floor(new Date().getTime() / ms("1h"));
-    let nextReviewFromNow = nextReviewObject.nextReview - now;
+    let nextReviewFromNow = nextReviewTime - now;
     return nextReviewFromNow;
   }
 
@@ -180,17 +180,24 @@ function StudyCard(props) {
         });
       } else {
         let nextReviewTime;
+        let nextReviewTimeString;
         if (!props.demo) {
           nextReviewTime = await getNextReviewTime();
+          if (nextReviewTime > 24) {
+            nextReviewTime = Math.floor(nextReviewTime / 24);
+            nextReviewTimeString = `${nextReviewTime} + day(s)`;
+          } else {
+            nextReviewTimeString = `${nextReviewTime} + hour(s)`;
+          }
         } else {
-          nextReviewTime = '2'; // arbitrary example next review time
+          nextReviewTimeString = '2 hour(s)'; // arbitrary example next review time
         }
         setSession({
           reviewFinished: true,
           cards: [
             {
               prompt: "All cards reviewed!",
-              promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTime} hour(s) for another review!`
+              promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTimeString} for another review!`
             }
           ]
         });
@@ -215,17 +222,24 @@ function StudyCard(props) {
         });
       } else {
         let nextReviewTime;
+        let nextReviewTimeString;
         if (!props.demo) {
           nextReviewTime = await getNextReviewTime();
+          if (nextReviewTime > 24) {
+            nextReviewTime = Math.floor(nextReviewTime / 24);
+            nextReviewTimeString = `${nextReviewTime} day(s)`;
+          } else {
+            nextReviewTimeString = `${nextReviewTime} hour(s)`;
+          }
         } else {
-          nextReviewTime = '2'; // arbitrary example next review time
+          nextReviewTimeString = '2 hour(s)'; // arbitrary example next review time
         }
         setSession({
           reviewFinished: true,
           cards: [
             {
               prompt: "All cards reviewed!",
-              promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTime} hour(s) for another review!`
+              promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTimeString} for another review!`
             }
           ]
         });
