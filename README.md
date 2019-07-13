@@ -11,6 +11,7 @@ So far, most of the main functionality has been implemented. You can:
 * Create an account (ie, a user)
 * Change your username
 * Change your password
+* Delete your account
 * Create a deck
 * Create a card
 * Browse decks
