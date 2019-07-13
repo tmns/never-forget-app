@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -105,7 +106,6 @@ function Settings({ history }) {
         initialValues={initialState}
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
-          console.log(values);
           if (values.newUsername && values.newPassword) {
             let usernameVars = {
               input: {
@@ -124,7 +124,6 @@ function Settings({ history }) {
               await updateUsername(usernameVars);
               await updatePassword(passwordVars);
               actions.setSubmitting(false);
-              console.log("success");
             } catch (e) {
               console.log(e);
             }
@@ -138,7 +137,6 @@ function Settings({ history }) {
             try {
               await updateUsername(variables);
               actions.setSubmitting(false);
-              console.log("success");
             } catch (e) {
               console.log(e);
             }
@@ -153,7 +151,6 @@ function Settings({ history }) {
             try {
               await updatePassword(variables);
               actions.setSubmitting(false);
-              console.log("success");
             } catch (e) {
               console.log(e);
               actions.setStatus({ msg: "Invalid details." });
@@ -312,6 +309,17 @@ function Settings({ history }) {
                   >
                     Submit
                   </Button>
+                  <Grid container justify="flex-end">
+                    <Grid item>
+                      <Link
+                        className={classes.link}
+                        to="/delete"
+                        variant="body2"
+                      >
+                        Do you want to delete your account?
+                      </Link>
+                    </Grid>
+                  </Grid>
                 </form>
               </div>
             </Container>

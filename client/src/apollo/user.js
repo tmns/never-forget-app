@@ -19,6 +19,15 @@ const updatePasswordMutation = gql`
   }
 `;
 
+const deleteAccountMutation = gql`
+  mutation deleteAccount($input: DeleteAccountInput!) {
+    deleteAccount(input: $input) {
+      username
+      _id
+    }
+  }
+`;
+
 async function updateUsername(variables) {
   return await client.mutate({ mutation: updateUsernameMutation, variables });
 }
@@ -27,7 +36,12 @@ async function updatePassword(variables) {
   return await client.mutate({ mutation: updatePasswordMutation, variables });
 }
 
+async function deleteAccount(variables) {
+  return await client.mutate({ mutation: deleteAccountMutation, variables });
+}
+
 export {
   updateUsername,
-  updatePassword
+  updatePassword,
+  deleteAccount
 }
