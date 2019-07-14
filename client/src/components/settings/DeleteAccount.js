@@ -17,6 +17,7 @@ import * as Yup from "yup";
 
 import CustomTheme from "../layout/CustomTheme";
 import { deleteAccount } from "../../apollo/user";
+import { signOutAfterDeletion } from "../../actions/session";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -98,7 +99,7 @@ const validationSchema = Yup.object().shape({
   currentPassword: Yup.string().required("Current Password is required!")
 });
 
-function DeleteAccount({ history }) {
+function DeleteAccount({ signOutAfterDeletion, history }) {
   const classes = useStyles();
 
   return (
@@ -115,7 +116,7 @@ function DeleteAccount({ history }) {
             }
             await deleteAccount(variables);
             actions.setSubmitting(false);
-            // todo: redirect user to home page
+            signOutAfterDeletion();
           } catch (err) {
             console.log(err);
             actions.setSubmitting(false);
@@ -197,4 +198,8 @@ function DeleteAccount({ history }) {
   );
 }
 
-export default DeleteAccount;
+const mapDispatchToProps = dispatch => ({
+  signOutAfterDeletion: () => dispatch(signOutAfterDeletion())
+})
+
+export default connect(null, mapDispatchToProps)(DeleteAccount);

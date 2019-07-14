@@ -40,3 +40,7 @@ export const signOut = () => async dispatch => {
     throw err;
   }
 }
+
+export const signOutAfterDeletion = () => async dispatch => {
+  return dispatch(logoutCurrentUser());
+}
