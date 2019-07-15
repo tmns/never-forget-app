@@ -40,8 +40,4 @@ async function deleteAccount(variables) {
   return await client.mutate({ mutation: deleteAccountMutation, variables });
 }
 
-export {
-  updateUsername,
-  updatePassword,
-  deleteAccount
-}
+export { updateUsername, updatePassword, deleteAccount };

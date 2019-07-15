@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { MuiThemeProvider } from "@material-ui/core/styles";
 import CustomTheme from "../layout/CustomTheme";
 import Navbar from "../layout/Navbar";
 import Table from "./Table";
@@ -31,17 +31,15 @@ const useStyles = makeStyles(theme => ({
 
 const Dashboard = ({ session, size }) => {
   const classes = useStyles();
-  
-  var [deckData, setDeckData] = React.useState(
-    {
-      title: 'Decks',
-      columns: [
-        { title: "Name", field: "name" },
-        { title: "Description", field: "description" }
-      ],
-      data: []
-    }
-  );
+
+  var [deckData, setDeckData] = React.useState({
+    title: "Decks",
+    columns: [
+      { title: "Name", field: "name" },
+      { title: "Description", field: "description" }
+    ],
+    data: []
+  });
 
   var [studyState, setStudyState] = React.useState({
     isStudying: false,
@@ -61,14 +59,14 @@ const Dashboard = ({ session, size }) => {
           name: deckObject.name,
           description: deckObject.description
         }));
-        setDeckData({...deckData, data: details});
+        setDeckData({ ...deckData, data: details });
         // to do: get number of cards in each deck + cards due for review
       } catch (err) {
         // handle error
       }
     }
     getDeckData();
-  }, [])
+  }, []);
 
   if (studyState.isStudying == false) {
     return (
@@ -87,16 +85,24 @@ const Dashboard = ({ session, size }) => {
             Welcome back, {session.username}!
           </Typography>
           <MuiThemeProvider theme={CustomTheme}>
-            <Table data={deckData} setDeckData={setDeckData} setStudyState={setStudyState}/>
+            <Table
+              data={deckData}
+              setDeckData={setDeckData}
+              setStudyState={setStudyState}
+            />
           </MuiThemeProvider>
         </Container>
         <Footer />
-      </Fragment>  
+      </Fragment>
     );
   } else {
     return (
-      <Study cards={studyState.cards} deckId={studyState.deckId} setStudyState={setStudyState} />
-    )
+      <Study
+        cards={studyState.cards}
+        deckId={studyState.deckId}
+        setStudyState={setStudyState}
+      />
+    );
   }
 };
 

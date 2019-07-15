@@ -13,7 +13,9 @@ describe("User schema", () => {
       }
     `;
 
-    const typeSchemas = await Promise.all(["user", "deck", "card"].map(loadTypeSchema));
+    const typeSchemas = await Promise.all(
+      ["user", "deck", "card"].map(loadTypeSchema)
+    );
     typeDefs = root + typeSchemas.join(" ");
     schema = schemaToTemplateContext(buildSchema(typeDefs));
   });
@@ -150,11 +152,11 @@ describe("User schema", () => {
     `;
     var vars = {
       input: {
-        username: 'test',
-        password: '12345678',
-        confirmPassword: '12345678'
+        username: "test",
+        password: "12345678",
+        confirmPassword: "12345678"
       }
-    }
+    };
     await expect(server.query(query, vars)).resolves.toBeTruthy();
     var { errors } = await server.query(query, vars);
     expect(errors).not.toBeTruthy();
@@ -172,10 +174,10 @@ describe("User schema", () => {
     `;
     var vars = {
       input: {
-        username: 'test',
-        password: '12345678',
+        username: "test",
+        password: "12345678"
       }
-    }
+    };
     await expect(server.query(query, vars)).resolves.toBeTruthy();
     var { errors } = await server.query(query, vars);
     expect(errors).not.toBeTruthy();
@@ -208,10 +210,10 @@ describe("User schema", () => {
     `;
     var vars = {
       input: {
-        username: 'test',
-        password: '12345678',
+        username: "test",
+        password: "12345678"
       }
-    }
+    };
     await expect(server.query(query, vars)).resolves.toBeTruthy();
     var { errors } = await server.query(query, vars);
     expect(errors).not.toBeTruthy();
@@ -229,11 +231,11 @@ describe("User schema", () => {
     `;
     var vars = {
       input: {
-        password: '12345678',
-        newPassword: '123456789',
-        confirmPassword: '123456789'
+        password: "12345678",
+        newPassword: "123456789",
+        confirmPassword: "123456789"
       }
-    }
+    };
     await expect(server.query(query, vars)).resolves.toBeTruthy();
     var { errors } = await server.query(query, vars);
     expect(errors).not.toBeTruthy();
@@ -251,9 +253,9 @@ describe("User schema", () => {
     `;
     var vars = {
       input: {
-        password: '12345678'
+        password: "12345678"
       }
-    }
+    };
     await expect(server.query(query, vars)).resolves.toBeTruthy();
     var { errors } = await server.query(query, vars);
     expect(errors).not.toBeTruthy();
