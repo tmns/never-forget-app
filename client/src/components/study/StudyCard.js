@@ -109,11 +109,11 @@ async function updateProgress(card, score, deckId) {
   );
 
   // calculate next time string for ui display
-  let nextTime = nextReview - now;
-  let nextTimeString = `${nextTime} hours`;
-  if (nextTime > 24) {
-    nextTimeString = `${Math.floor(nextTime / 24)} day(s)`;
-  }
+  // let nextTime = nextReview - now;
+  // let nextTimeString = `${nextTime} hours`;
+  // if (nextTime > 24) {
+  //   nextTimeString = `${Math.floor(nextTime / 24)} day(s)`;
+  // }
   // Do something with nextTimeString (eg display to user)
 
   // attempt to update card progress values in db
@@ -185,12 +185,12 @@ function StudyCard(props) {
           nextReviewTime = await getNextReviewTime();
           if (nextReviewTime > 24) {
             nextReviewTime = Math.floor(nextReviewTime / 24);
-            nextReviewTimeString = `${nextReviewTime} + day(s)`;
+            nextReviewTimeString = `${nextReviewTime} ${nextReviewTime == 1 ? 'day' : 'days'}`;
           } else {
-            nextReviewTimeString = `${nextReviewTime} + hour(s)`;
+            nextReviewTimeString = `${nextReviewTime} ${nextReviewTime == 1 ? 'hour' : 'hours'}`;
           }
         } else {
-          nextReviewTimeString = '2 hour(s)'; // arbitrary example next review time
+          nextReviewTimeString = '2 hours'; // arbitrary example next review time
         }
         setSession({
           reviewFinished: true,
@@ -227,12 +227,12 @@ function StudyCard(props) {
           nextReviewTime = await getNextReviewTime();
           if (nextReviewTime > 24) {
             nextReviewTime = Math.floor(nextReviewTime / 24);
-            nextReviewTimeString = `${nextReviewTime} day(s)`;
+            nextReviewTimeString = `${nextReviewTime} ${nextReviewTime == 1 ? 'day' : 'days'}`;
           } else {
-            nextReviewTimeString = `${nextReviewTime} hour(s)`;
+            nextReviewTimeString = `${nextReviewTime} ${nextReviewTime == 1 ? 'hour' : 'hours'}`;
           }
         } else {
-          nextReviewTimeString = '2 hour(s)'; // arbitrary example next review time
+          nextReviewTimeString = '2 hours'; // arbitrary example next review time
         }
         setSession({
           reviewFinished: true,
