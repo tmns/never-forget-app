@@ -94,7 +94,7 @@ async function start() {
   };
 
   try {
-    await app.listen(opts);
+    await app.listen({port: process.env.PORT || 4000});
     console.log(`GQL server ready at ${serverUrl}${server.graphqlPath}`);
   } catch (err) {
     console.log(`Error bringing up the server: ${err}`);
