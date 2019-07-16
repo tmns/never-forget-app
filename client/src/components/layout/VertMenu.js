@@ -50,7 +50,7 @@ function VertMenu({ signOut, loggedIn }) {
       >
         {!loggedIn && <MenuItem component={Link} to="/signin">Sign In</MenuItem>}
         {!loggedIn && <MenuItem component={Link} to="/signup">Sign Up</MenuItem>}
-        {loggedIn && <MenuItem onClick={handleClose}>Settings</MenuItem>}
+        {loggedIn && <MenuItem component={Link} to="/settings">Settings</MenuItem>}
         {loggedIn && <MenuItem onClick={signOut}>Logout</MenuItem>}
       </Menu>
     </div>
