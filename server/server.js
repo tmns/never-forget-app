@@ -67,7 +67,7 @@ async function start() {
   const serverUrl = `${config.PROTO}://${config.HOST}:${config.PORT}`;
 
   var corsOptions = {
-    origin: ["http://localhost:3000", serverUrl],
+    origin: ["http://localhost:3000", serverUrl, process.env.PROD_URL],
     credentials: true
   };
 
