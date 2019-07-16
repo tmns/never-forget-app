@@ -71,6 +71,8 @@ async function start() {
     credentials: true
   };
 
+  console.log(process.env.PROD_URL);
+
   app.use(cors(corsOptions));
 
   // serve static assets if in prod
