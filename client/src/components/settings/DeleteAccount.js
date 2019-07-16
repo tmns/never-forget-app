@@ -1,9 +1,8 @@
 import React, { Fragment } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import DeleteIcon from "@material-ui/icons/DeleteForever";
@@ -113,14 +112,14 @@ function DeleteAccount({ signOutAfterDeletion, history }) {
               input: {
                 password: values.currentPassword
               }
-            }
+            };
             await deleteAccount(variables);
             actions.setSubmitting(false);
             signOutAfterDeletion();
           } catch (err) {
             console.log(err);
             actions.setSubmitting(false);
-            actions.setStatus({ msg: "Invalid password."});
+            actions.setStatus({ msg: "Invalid password." });
           }
         }}
       >
@@ -186,7 +185,8 @@ function DeleteAccount({ signOutAfterDeletion, history }) {
                     Delete Account
                   </Button>
                   <Typography component="h5" align="center">
-                    Be careful! All your decks and cards will be permanently deleted!
+                    Be careful! All your decks and cards will be permanently
+                    deleted!
                   </Typography>
                 </form>
               </div>
@@ -200,6 +200,9 @@ function DeleteAccount({ signOutAfterDeletion, history }) {
 
 const mapDispatchToProps = dispatch => ({
   signOutAfterDeletion: () => dispatch(signOutAfterDeletion())
-})
+});
 
-export default connect(null, mapDispatchToProps)(DeleteAccount);
+export default connect(
+  null,
+  mapDispatchToProps
+)(DeleteAccount);

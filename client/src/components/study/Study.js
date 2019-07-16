@@ -11,8 +11,6 @@ import CustomTheme from "../layout/CustomTheme";
 import Navbar from "../layout/Navbar";
 import StudyCard from "./StudyCard";
 import Footer from "../layout/Footer";
-import client from "../../apollo/client";
-import { decksQuery } from "../../apollo/deck";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
