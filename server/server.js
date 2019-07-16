@@ -64,14 +64,14 @@ async function start() {
     })
   );
 
+  app.set('trust proxy', 1);
+
   const serverUrl = `${config.PROTO}://${config.HOST}:${config.PORT}`;
 
   var corsOptions = {
     origin: ["http://localhost:3000", serverUrl, process.env.PROD_URL],
     credentials: true
   };
-
-  console.log(process.env.PROD_URL);
 
   app.use(cors(corsOptions));
 
