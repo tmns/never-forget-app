@@ -75,9 +75,9 @@ async function start() {
 
   // serve static assets if in prod
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client', '/build')));
-    app.get('/*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../client', 'build', 'index.html'));
+    app.use(express.static(path.join(__dirname, 'public')));
+    app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
     });
   }
 
@@ -94,7 +94,7 @@ async function start() {
   };
 
   try {
-    await app.listen({port: process.env.PORT || 4000});
+    await app.listen(opts);
     console.log(`GQL server ready at ${serverUrl}${server.graphqlPath}`);
   } catch (err) {
     console.log(`Error bringing up the server: ${err}`);
