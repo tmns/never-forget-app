@@ -158,103 +158,63 @@ function StudyCard(props) {
     setExpanded(!expanded);
   }
 
-  async function handleNoClick() {
-    setExpanded(false);
+  function handleAnswerClick(answer = 0) {
+    return async function handleAnswer() {
+      setExpanded(false);
 
-    // if not demo cards on landing page
-    if (!props.demo) {
-      props.setNumCards(props.numCards - 1);
+      var currentCard = session.cards[0];
 
-      // attempt to update progress values
-      await updateProgress(session.cards[0], 0, props.deckId);
-    }
-
-    // we delay here so the answer isnt revealed as the expansion closes
-    setTimeout(async () => {
-      if (session.cards.length > 1) {
-        setSession({
-          ...session,
-          cards: session.cards.slice(1)
-        });
-      } else {
-        let nextReviewTime;
-        let nextReviewTimeString;
+        // if not demo cards on landing page
         if (!props.demo) {
-          nextReviewTime = await getNextReviewTime();
-          if (nextReviewTime > 24) {
-            nextReviewTime = Math.floor(nextReviewTime / 24);
-            nextReviewTimeString = `${nextReviewTime} ${nextReviewTime == 1 ? 'day' : 'days'}`;
-          } else {
-            nextReviewTimeString = `${nextReviewTime} ${nextReviewTime == 1 ? 'hour' : 'hours'}`;
+          props.setNumCards(props.numCards - 1);
+        }
+
+      // we delay here so the answer isnt revealed as the expansion closes
+      setTimeout(async () => {
+        if (session.cards.length > 1) {
+          setSession({
+            ...session,
+            cards: session.cards.slice(1)
+          });
+          if (!props.demo) {
+            // attempt to update progress values
+            await updateProgress(currentCard, answer, props.deckId);
           }
         } else {
-          nextReviewTimeString = '2 hours'; // arbitrary example next review time
-        }
-        setSession({
-          reviewFinished: true,
-          cards: [
-            {
-              prompt: "All cards reviewed!",
-              promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTimeString} for another review!`
+          let nextReviewTime;
+          let nextReviewTimeString;
+          if (!props.demo) {
+            await updateProgress(currentCard, answer, props.deckId);
+            nextReviewTime = await getNextReviewTime();
+            if (nextReviewTime > 24) {
+              nextReviewTime = Math.floor(nextReviewTime / 24);
+              nextReviewTimeString = `${nextReviewTime} ${
+                nextReviewTime == 1 ? "day" : "days"
+              }`;
+            } else {
+              nextReviewTimeString = `${nextReviewTime} ${
+                nextReviewTime == 1 ? "hour" : "hours"
+              }`;
             }
-          ]
-        });
-      }
-    }, 250);
-  }
-
-  async function handleYesClick() {
-    setExpanded(false);
-    if (!props.demo) {
-      props.setNumCards(props.numCards - 1);
-
-      // attempt to update progress values
-      await updateProgress(session.cards[0], 1, props.deckId);
-    }
-
-    setTimeout(async () => {
-      if (session.cards.length > 1) {
-        setSession({
-          ...session,
-          cards: session.cards.slice(1)
-        });
-      } else {
-        let nextReviewTime;
-        let nextReviewTimeString;
-        if (!props.demo) {
-          nextReviewTime = await getNextReviewTime();
-          if (nextReviewTime > 24) {
-            nextReviewTime = Math.floor(nextReviewTime / 24);
-            nextReviewTimeString = `${nextReviewTime} ${nextReviewTime == 1 ? 'day' : 'days'}`;
           } else {
-            nextReviewTimeString = `${nextReviewTime} ${nextReviewTime == 1 ? 'hour' : 'hours'}`;
+            nextReviewTimeString = "2 hours"; // arbitrary example next review time
           }
-        } else {
-          nextReviewTimeString = '2 hours'; // arbitrary example next review time
+          setSession({
+            reviewFinished: true,
+            cards: [
+              {
+                prompt: "All cards reviewed!",
+                promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTimeString} for another review!`
+              }
+            ]
+          });
         }
-        setSession({
-          reviewFinished: true,
-          cards: [
-            {
-              prompt: "All cards reviewed!",
-              promptExample: `Great job! You have reviewed all the cards for this deck. Check back in ${nextReviewTimeString} for another review!`
-            }
-          ]
-        });
-      }
-    }, 250);
+      }, 250);
+    };
   }
 
   return (
     <Card className={classes.card}>
-      {/* <CardHeader
-        className={classes.header}
-        action={
-          <IconButton aria-label="Settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-      /> */}
       <CardContent>
         <Typography variant="h5" component="h2">
           {session.cards[0].prompt}
@@ -267,7 +227,7 @@ function StudyCard(props) {
       <div className={session.reviewFinished ? classes.hide : ""}>
         <StyledActions>
           <Tooltip title="This was hard!">
-            <IconButton aria-label="Mark hard" onClick={handleNoClick}>
+            <IconButton aria-label="Mark hard" onClick={handleAnswerClick(0)}>
               <ThumbDown />
             </IconButton>
           </Tooltip>
@@ -284,7 +244,7 @@ function StudyCard(props) {
             </IconButton>
           </Tooltip>
           <Tooltip title="This was easy!">
-            <IconButton aria-label="Mark easy" onClick={handleYesClick}>
+            <IconButton aria-label="Mark easy" onClick={handleAnswerClick(1)}>
               <ThumbUp />
             </IconButton>
           </Tooltip>
