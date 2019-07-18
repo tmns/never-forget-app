@@ -77,7 +77,7 @@ const useStyles = makeStyles(theme => ({
     color: CustomTheme.palette.primary.contrastText,
     fontSize: "15px",
     fontWeight: "300",
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
     textAlign: "center"
   }
 }));
@@ -99,9 +99,6 @@ function Table(props) {
 
   return (
     <React.Fragment>
-      {errors.emptyDeck && (
-        <div className={classes.error}>{errors.emptyDeck}</div>
-      )}
       <MaterialTable
         icons={tableIcons}
         title={state.title}
@@ -212,9 +209,26 @@ function Table(props) {
                   card.nextReview <= Math.floor(new Date().getTime() / ms("1h"))
               );
               if (overDueCards.length == 0) {
+                // calculate in how long another card will be ready for review
+                let nextReviewTime = data.data.cards.reduce((acc, card) => {
+                  acc = card.nextReview < acc ? card.nextReview : acc;
+                  return acc;
+                }, data.data.cards[0].nextReview);
+                let now = Math.floor(new Date().getTime() / ms("1h"));
+                let nextReviewFromNow = nextReviewTime - now;
+                let nextReviewTimeString;
+                if (nextReviewFromNow > 24) {
+                  nextReviewFromNow = Math.floor(nextReviewFromNow / 24);
+                  nextReviewTimeString = `${nextReviewFromNow} ${
+                    nextReviewFromNow == 1 ? "day" : "days"
+                  }`;
+                } else {
+                  nextReviewTimeString = `${nextReviewFromNow} ${
+                    nextReviewFromNow == 1 ? "hour" : "hours"
+                  }`;
+                }
                 setErrors({
-                  emptyDeck:
-                    "Sorry, this deck has no cards scheduled for review at this time."
+                  emptyDeck: `Sorry, this deck has no cards scheduled for review at this time. Check back in ${nextReviewTimeString}.`
                 });
               } else {
                 let overDueCardsSorted = overDueCards.sort(
@@ -276,6 +290,9 @@ function Table(props) {
             <ArrowBackOutlinedIcon /> Return to decks
           </IconButton>
         </div>
+      )}
+      {errors.emptyDeck && (
+        <div className={classes.error}>{errors.emptyDeck}</div>
       )}
     </React.Fragment>
   );
