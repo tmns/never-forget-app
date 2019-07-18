@@ -97,6 +97,17 @@ function Table(props) {
 
   var isActionHidden = isBrowsingCardsState;
 
+  // placement of action buttons,
+  // in deck view we want them on the far right, ie -1
+  // in card view we want them on far left, ie 0
+  // this is mainly to facilitate the experience on mobile
+  var actionsColumnIndex;
+  if (!isBrowsingCardsState) {
+    actionsColumnIndex = -1;
+  } else {
+    actionsColumnIndex = 0;
+  }
+
   return (
     <React.Fragment>
       <MaterialTable
@@ -269,11 +280,12 @@ function Table(props) {
               };
               setIsBrowsingCardsState(true);
               setState(cardData);
+              actionsColumnIndex = 0;
             }
           }
         ]}
         options={{
-          actionsColumnIndex: -1,
+          actionsColumnIndex: actionsColumnIndex,
           exportButton: true,
           exportFileName: "never-forget-export.csv"
         }}
@@ -291,9 +303,7 @@ function Table(props) {
           </IconButton>
         </div>
       )}
-      {errors.emptyDeck && (
-        <div className={classes.error}>{errors.emptyDeck}</div>
-      )}
+      <div className={classes.error}>{errors.emptyDeck}</div>
     </React.Fragment>
   );
 }
