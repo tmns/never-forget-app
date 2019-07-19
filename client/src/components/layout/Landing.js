@@ -8,8 +8,8 @@ import Link from "@material-ui/core/Link";
 
 import CustomTheme from "./CustomTheme";
 import Navbar from "./Navbar";
-import StudyCard from '../study/StudyCard'
-import Footer from './Footer';
+import StudyCard from "../study/StudyCard";
+import Footer from "./Footer";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -64,7 +64,11 @@ var exampleCards = [
 function Landing() {
   const classes = useStyles();
 
-  var NeverForgetStyled = <span style={{color: CustomTheme.palette.secondary.main}}>Never Forget</span>;
+  var NeverForgetStyled = (
+    <span style={{ color: CustomTheme.palette.secondary.main }}>
+      Never Forget
+    </span>
+  );
 
   return (
     <Fragment>
@@ -73,14 +77,33 @@ function Landing() {
         <Navbar />
         <Container component="main" maxWidth="md">
           <div className={classes.paper}>
-            <Typography className={classes.header} component="h1" variant="h3" align="center">
+            <Typography
+              className={classes.header}
+              component="h1"
+              variant="h3"
+              align="center"
+            >
               Welcome to {NeverForgetStyled}
             </Typography>
-            <Typography className={classes.header} component="h4" align="center">
-              A <Link className={classes.link} href="https://www.youtube.com/watch?v=osK0Agqu7dc" target="_blank">Spaced Repetition Learning</Link> App<br/>
-              Play around with the example cards below or sign up to create your own!
+            <Typography
+              className={classes.header}
+              component="h4"
+              align="center"
+            >
+              A{" "}
+              <Link
+                className={classes.link}
+                href="https://www.youtube.com/watch?v=osK0Agqu7dc"
+                target="_blank"
+              >
+                Spaced Repetition Learning
+              </Link>{" "}
+              App
+              <br />
+              Play around with the example cards below or sign up to create your
+              own!
             </Typography>
-            <StudyCard cards={exampleCards} demo={true}/>
+            <StudyCard cards={exampleCards} demo={true} />
           </div>
         </Container>
         <Footer />

@@ -39,7 +39,11 @@ export default function StickyFooter() {
             {"crafted with "}
             <span className={classes.heart}>❤</span>
             {" by "}
-            <Link className={classes.link} href="https://github.com/tmns" target="_blank">
+            <Link
+              className={classes.link}
+              href="https://github.com/tmns"
+              target="_blank"
+            >
               @tmns
             </Link>
           </Typography>

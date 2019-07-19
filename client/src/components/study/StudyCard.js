@@ -164,10 +164,10 @@ function StudyCard(props) {
 
       var currentCard = session.cards[0];
 
-        // if not demo cards on landing page
-        if (!props.demo) {
-          props.setNumCards(props.numCards - 1);
-        }
+      // if not demo cards on landing page
+      if (!props.demo) {
+        props.setNumCards(props.numCards - 1);
+      }
 
       // we delay here so the answer isnt revealed as the expansion closes
       setTimeout(async () => {

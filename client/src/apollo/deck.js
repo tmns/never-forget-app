@@ -83,11 +83,11 @@ async function updateDeckInDB(oldData, newData) {
   }
 }
 
-export { 
-  decksQuery, 
-  addDeck, 
-  updateDeck, 
-  removeDeck, 
+export {
+  decksQuery,
+  addDeck,
+  updateDeck,
+  removeDeck,
   getDeckId,
   updateDeckInDB
 };
