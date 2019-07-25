@@ -97,6 +97,8 @@ function getNewProgressValues(score, intervalProgress, now) {
   };
 }
 
+var nextReviewTimes = [];
+
 async function updateProgress(card, score, deckId) {
   // calculate new progress values
   let now = Math.floor(new Date().getTime() / ms("1h"));
@@ -106,15 +108,8 @@ async function updateProgress(card, score, deckId) {
     now
   );
 
-  // calculate next time string for ui display
-  // let nextTime = nextReview - now;
-  // let nextTimeString = `${nextTime} hours`;
-  // if (nextTime > 24) {
-  //   nextTimeString = `${Math.floor(nextTime / 24)} day(s)`;
-  // }
-  // Do something with nextTimeString (eg display to user)
+  nextReviewTimes = nextReviewTimes.concat(nextReview);
 
-  // attempt to update card progress values in db
   try {
     let data = {
       prompt: card.prompt,
@@ -127,6 +122,17 @@ async function updateProgress(card, score, deckId) {
   }
 }
 
+function getNextReviewTime(nextReviews) {
+  let nextReviewTime = nextReviews.reduce((acc, nextReview) => {
+    acc = nextReview < acc ? nextReview : acc;
+    return acc;
+  }, nextReviews[0]);
+
+  let now = Math.floor(new Date().getTime() / ms("1h"));
+  let nextReviewFromNow = nextReviewTime - now;
+  return nextReviewFromNow;
+}
+
 function StudyCard(props) {
   const classes = useStyles();
 
@@ -134,25 +140,9 @@ function StudyCard(props) {
 
   const [session, setSession] = React.useState({
     cards: props.cards,
-    reviewFinished: false
+    reviewFinished: false,
+    updatedCards: {}
   });
-
-  async function getNextReviewTime() {
-    var data = await client.query({
-      query: cardsQueryNextReview,
-      variables: { deckId: props.deckId },
-      fetchPolicy: "no-cache"
-    });
-
-    var nextReviewTime = data.data.cards.reduce((acc, card) => {
-      acc = card.nextReview < acc ? card.nextReview : acc;
-      return acc;
-    }, data.data.cards[0].nextReview);
-
-    let now = Math.floor(new Date().getTime() / ms("1h"));
-    let nextReviewFromNow = nextReviewTime - now;
-    return nextReviewFromNow;
-  }
 
   function handleExpandClick() {
     setExpanded(!expanded);
@@ -185,7 +175,7 @@ function StudyCard(props) {
           let nextReviewTimeString;
           if (!props.demo) {
             await updateProgress(currentCard, answer, props.deckId);
-            nextReviewTime = await getNextReviewTime();
+            nextReviewTime = getNextReviewTime(nextReviewTimes);
             if (nextReviewTime > 24) {
               nextReviewTime = Math.floor(nextReviewTime / 24);
               nextReviewTimeString = `${nextReviewTime} ${

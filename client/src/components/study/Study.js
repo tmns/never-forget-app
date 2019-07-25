@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Study = ({ session, size, cards, deckId, setStudyState }) => {
+const Study = ({ session, cards, deckId, setStudyState }) => {
   const classes = useStyles();
 
   const [numCards, setNumCards] = useState(cards.length);
