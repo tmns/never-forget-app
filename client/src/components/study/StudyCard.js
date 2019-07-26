@@ -15,8 +15,7 @@ import ThumbDown from "@material-ui/icons/ThumbDown";
 import Divider from "@material-ui/core/Divider";
 import { Tooltip } from "@material-ui/core";
 
-import client from "../../apollo/client";
-import { updateCardProgress, cardsQueryNextReview } from "../../apollo/card";
+import { updateCardProgress } from "../../apollo/card";
 
 const useStyles = makeStyles(theme => ({
   header: {

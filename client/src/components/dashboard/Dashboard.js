@@ -60,7 +60,6 @@ const Dashboard = ({ session, size }) => {
           description: deckObject.description
         }));
         setDeckData({ ...deckData, data: details });
-        // to do: get number of cards in each deck + cards due for review
       } catch (err) {
         // handle error
       }

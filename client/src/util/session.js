@@ -1,5 +1,4 @@
 import { gql } from "apollo-boost";
-
 import client from "../apollo/client";
 
 const isLoginQuery = gql`
