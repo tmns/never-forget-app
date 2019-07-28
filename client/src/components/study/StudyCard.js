@@ -170,6 +170,15 @@ function StudyCard(props) {
             await updateProgress(currentCard, answer, props.deckId);
           }
         } else {
+					setSession({
+						reviewFinished: true,
+						cards: [
+							{
+								prompt: '',
+								promptExample: 'Updating your progress...'
+							}
+						]
+					});
           let nextReviewTime;
           let nextReviewTimeString;
           if (!props.demo) {
@@ -189,7 +198,7 @@ function StudyCard(props) {
             nextReviewTimeString = "2 hours"; // arbitrary example next review time
           }
           setSession({
-            reviewFinished: true,
+						...session,
             cards: [
               {
                 prompt: "All cards reviewed!",
