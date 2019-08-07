@@ -139,8 +139,7 @@ function StudyCard(props) {
 
   const [session, setSession] = React.useState({
     cards: props.cards,
-    reviewFinished: false,
-    updatedCards: {}
+    reviewFinished: false
   });
 
   function handleExpandClick() {
@@ -171,6 +170,7 @@ function StudyCard(props) {
           }
         } else {
 					setSession({
+						...session,
 						reviewFinished: true,
 						cards: [
 							{
@@ -199,6 +199,7 @@ function StudyCard(props) {
           }
           setSession({
 						...session,
+						reviewFinished: true,
             cards: [
               {
                 prompt: "All cards reviewed!",
