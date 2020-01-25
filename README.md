@@ -4,7 +4,7 @@
 
 Never Forget is a spaced repetition learning app designed to be as simple as possible to use! It features a card based learning interface, as this is a rather familiar method of learning for folks. Before building the app, I also built a [CLI version](https://github.com/tmns/never-forget-cli) and a [backend server](https://github.com/tmns/never-forget-server); so feel free to play around with both of those as well.
 
-The application has been built with the help of React, Material, Formik, Apollo, MongoDB (via Mongoose), and Node with Express. You can give it a spin [here](https://never-forget-app.herokuapp.com).
+The application has been built with the help of React, Material, Formik, Apollo, MongoDB (via Mongoose), and Node with Express. You can give it a spin [here](https://never-forget-app.herokuapp.com). Note however, I use a free tier at Heroku so the initial start up time is pretty slow!
 
 So far, most of the main functionality has been implemented. You can:
 
