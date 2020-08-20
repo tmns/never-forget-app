@@ -71,7 +71,7 @@
   },
   "dependencies": {
     "apollo-server-express": "^2.5.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "connect-mongodb-session": "^2.1.1",
     "cors": "^2.8.5",
     "cuid": "^2.1.6",
