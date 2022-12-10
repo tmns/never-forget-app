@@ -75,7 +75,7 @@
     "connect-mongodb-session": "^2.1.1",
     "cors": "^2.8.5",
     "cuid": "^2.1.6",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.16.1",
     "graphql": "^14.3.1",
     "graphql-import": "^0.7.1",
